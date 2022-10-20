@@ -1,0 +1,4 @@
+---
+service_name: ssh
+sshd_config_file: /etc/ssh/sshd_config.d/sshd_hardening.conf
+ssh_config_file: /etc/ssh/ssh_config.d/ssh_hardening.conf

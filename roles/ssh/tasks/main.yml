@@ -1,0 +1,90 @@
+---
+- name: Load OS-vars for {{ ansible_os_family }}
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - '{{ ansible_os_family }}.yml'
+        - main.yml
+      paths:
+        - 'vars'
+
+- name: Creating group {{ ssh_group_name }}
+  ansible.builtin.group:
+    name: "{{ ssh_group_name }}"
+    state: present
+
+- name: Allowing {{ allowed_users }} to use SSH
+  ansible.builtin.user:
+    name: "{{ item }}"
+    groups: "{{ ssh_group_name }}"
+    append: true
+  with_items: "{{ allowed_users }}"
+  when: allowed_users | length > 0
+  
+- name: Enable service {{ service_name }}
+  ansible.builtin.service:
+    name: "{{ service_name }}"
+    enabled: yes
+
+- name: Update SSHD config > {{ sshd_config_file }}
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config_file }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+    validate: 'sshd -t -f %s'
+    mode: '0600'
+    create: true
+  with_items:
+    - regexp: "^PasswordAuthentication"
+      line: "PasswordAuthentication no"
+    - regexp: "^PermitRootLogin"
+      line: "PermitRootLogin no"
+    - regexp: "^AllowTcpForwarding"
+      line: "AllowTcpForwarding no"
+    - regexp: "^ClientAliveCountMax"
+      line: "ClientAliveCountMax 2"
+    - regexp: "^Compression"
+      line: "Compression no"
+    - regexp: "^MaxAuthTries"
+      line: "MaxAuthTries 3"
+    - regexp: "^MaxSessions"
+      line: "MaxSessions 2"
+    - regexp: "^TCPKeepAlive"
+      line: "TCPKeepAlive no"
+    - regexp: "^AllowAgentForwarding"
+      line: "AllowAgentForwarding no"
+    - regexp: "^AllowTcpForwarding"
+      line: "AllowTcpForwarding no"
+    - regexp: "^ClientAliveCountMax"
+      line: "ClientAliveCountMax 2"
+    - regexp: "^Compression"
+      line: "Compression no"
+    - regexp: "^MaxAuthTries"
+      line: "MaxAuthTries 3"
+    - regexp: "^MaxSessions"
+      line: "MaxSessions 2"
+    - regexp: "^TCPKeepAlive"
+      line: "TCPKeepAlive no"
+    - regexp: "^AllowAgentForwarding"
+      line: "AllowAgentForwarding no"
+    - regexp: "^AllowGroups"
+      line: "AllowGroups {{ ssh_group_name }}"
+    - regexp: "^KexAlgorithms"
+      line: "KexAlgorithms {{ kex_algorithms }}"
+    - regexp: "^Ciphers"
+      line: "Ciphers {{ ciphers }}"
+    - regexp: "^MACs"
+      line: "MACs {{ macs }}"
+    - regexp: "^HostKeyAlgorithms"
+      line: "HostKeyAlgorithms {{ host_key_algorithms }}"
+  notify: restart ssh
+
+- name: Configuring SSH > {{ ssh_config_file }}
+  template:
+    src: ssh_config.j2
+    dest: "{{ ssh_config_file }}"
+    owner: root
+    group: root
+    mode: '0644'
