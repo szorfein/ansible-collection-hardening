@@ -1,7 +1,18 @@
 ---
 # defaults file for secure_shell
-ssh_group_name: ssh-user
 allowed_users: []
+
+sshd_allow_group: ssh-user
+sshd_allow_agent_forwarding: 'no'
+sshd_allow_tcp_forwarding: 'no'
+sshd_client_alive_count_max: 2
+sshd_compression: 'no'
+sshd_max_auth_tries: 3
+sshd_max_sessions: 2
+sshd_log_level: 'VERBOSE'
+sshd_password_authentication: 'no'
+sshd_permit_root_login: 'no'
+sshd_tcp_keep_alive: 'no'
 
 kex_algorithms: curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group-exchange-sha256
 ciphers: chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
