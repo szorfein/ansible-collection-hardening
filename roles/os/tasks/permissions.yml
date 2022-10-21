@@ -1,0 +1,83 @@
+---
+- name: Fix directory permissions
+  ansible.builtin.file:
+    path: '{{ item }}'
+    state: directory
+    mode: 0700
+  with_items:
+    - /boot
+    - /usr/src
+    - /usr/lib/modules
+    - '{{ ansible_user_dir }}'
+
+- name: Find cron directories
+  ansible.builtin.find:
+    paths:
+      - /etc
+    patterns:
+      - cron.hourly
+      - cron.daily
+      - cron.weekly
+      - cron.monthly
+      - cron.d
+    file_type: directory
+  register: cron_directories
+
+- name: set ownership of cron directories to 0700
+  ansible.builtin.file:
+    mode: 0700
+    path: '{{ item.path }}'
+    state: directory
+  loop: '{{ cron_directories.files }}'
+
+- name: Find cron files
+  ansible.builtin.find:
+    paths:
+      - /etc
+    patterns:
+      - crontab
+      - cron.deny
+    file_type: any
+  register: cron_directories
+
+- name: set ownership of cron files to 0600
+  ansible.builtin.file:
+    mode: 0600
+    path: '{{ item.path }}'
+    state: touch
+    modification_time: preserve
+    access_time: preserve
+  loop: '{{ cron_directories.files }}'
+
+- name: get all home directories in /home
+  ansible.builtin.find:
+    paths: /home/
+    recurse: false
+    file_type: directory
+  register: home_directories
+
+- name: set ownership of /home directories to 0700
+  ansible.builtin.file:
+    mode: 0700
+    path: '{{ item.path }}'
+    state: directory
+  loop: '{{ home_directories.files }}'
+
+- name: get all /etc/sudoers.d files
+  ansible.builtin.find:
+    paths: /etc/sudoers.d
+    recurse: false
+    file_type: file
+  register: sudoers
+
+- name: set ownership of /etc/sudoers.d/* to 0600
+  ansible.builtin.file:
+    mode: 0600
+    path: '{{ item.path }}'
+  loop: '{{ sudoers.files }}'
+
+- name: set ownership of /etc/sudoers.d to 0750
+  ansible.builtin.file:
+    mode: 0750
+    path: /etc/sudoers.d
+    state: directory

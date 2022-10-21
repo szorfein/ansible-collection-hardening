@@ -1,4 +1,6 @@
 ---
 # defaults file for szorfein.hardening.os
+os_fix_core_dumps: true
 os_fix_permissions: true
+
 os_umask: '0027'

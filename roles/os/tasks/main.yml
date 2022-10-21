@@ -24,8 +24,8 @@
 - name: Hidepid
   import_tasks: hidepid.yml
 
-- name: Coredump
-  import_tasks: coredump.yml
+- import_tasks: core_dumps.yml
+  when: os_fix_core_dumps | bool
 
 - name: umask to {{ os_umask }}
   ansible.builtin.lineinfile:

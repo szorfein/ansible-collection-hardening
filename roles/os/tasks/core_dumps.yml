@@ -18,3 +18,9 @@
     path: /etc/security/limits.conf 
     regexp: '^\* hard core'
     line: '* hard core 0'
+
+- name: apply ulimit to /etc/profile
+  ansible.builtin.lineinfile:
+    path: /etc/profile
+    regexp: '^ulimit'
+    line: 'ulimit -c 0'

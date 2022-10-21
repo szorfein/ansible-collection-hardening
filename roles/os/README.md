@@ -11,8 +11,10 @@ Any pre-requisites that may not be covered by Ansible itself or the role should 
 Role Variables
 --------------
 
+- `os_fix_core_dumps`
+  - Default: `true`
 - `os_fix_permissions`
-  - Default: true
+  - Default: `true`
 - `os_umask`
   - Default: `'027''
 
