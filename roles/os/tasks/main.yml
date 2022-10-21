@@ -18,8 +18,8 @@
     - Load module jitterentropy
     - Recompile initrd
 
-- name: Fixing permissions
-  import_tasks: permission.yml
+- import_tasks: permissions.yml
+  when: os_fix_permissions | bool
 
 - name: Hidepid
   import_tasks: hidepid.yml
@@ -27,8 +27,8 @@
 - name: Coredump
   import_tasks: coredump.yml
 
-- name: umask to 027
+- name: umask to {{ os_umask }}
   ansible.builtin.lineinfile:
     path: /etc/profile
     regexp: '^umask'
-    line: 'umask 0027'
+    line: "umask {{ os_umask }}"
