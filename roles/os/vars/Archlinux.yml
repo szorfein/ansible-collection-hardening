@@ -1,0 +1,4 @@
+---
+entropy_pkgname: haveged
+service_name: haveged
+cmd_recompile_initrd: mkinitcpio -p linux

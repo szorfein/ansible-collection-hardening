@@ -8,6 +8,7 @@ Collection tested on:
 ## Include Roles
 
 + [secure_shell]()
++ [os](https://github.com/szorfein/ansible-collection-hardening/tree/main/roles/os)
 
 ## Install
 

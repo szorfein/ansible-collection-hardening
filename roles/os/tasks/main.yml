@@ -1,0 +1,34 @@
+---
+- name: Load OS-specific vars.
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - '{{ ansible_os_family }}.yml'
+        - main.yml
+      paths:
+        - 'vars'
+
+- name: Entropy {{ entropy_pkgname }}
+  package:
+    name: '{{ entropy_pkgname }}'
+    state: present
+  notify:
+    - Start Entropy Service
+    - Load module jitterentropy
+    - Recompile initrd
+
+- name: Fixing permissions
+  import_tasks: permission.yml
+
+- name: Hidepid
+  import_tasks: hidepid.yml
+
+- name: Coredump
+  import_tasks: coredump.yml
+
+- name: umask to 027
+  ansible.builtin.lineinfile:
+    path: /etc/profile
+    regexp: '^umask'
+    line: 'umask 0027'
