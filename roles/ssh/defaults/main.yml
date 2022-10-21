@@ -13,6 +13,7 @@ sshd_log_level: 'VERBOSE'
 sshd_password_authentication: 'no'
 sshd_permit_root_login: 'no'
 sshd_tcp_keep_alive: 'no'
+sshd_x11_forwarding: 'no'
 
 kex_algorithms: curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group-exchange-sha256
 ciphers: chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr

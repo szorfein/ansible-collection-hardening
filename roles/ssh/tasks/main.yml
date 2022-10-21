@@ -69,6 +69,16 @@
       line: "LogLevel {{ sshd_log_level }}"
   notify: restart ssh
 
+- name: Global sshd
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^X11Forwarding"
+    line: "X11Forwarding {{ sshd_x11_forwarding }}"
+    state: present
+    validate: 'sshd -t -f %s'
+    mode: '0600'
+  notify: restart ssh
+
 - name: Configuring SSH > {{ ssh_config_file }}
   template:
     src: ssh_config.j2

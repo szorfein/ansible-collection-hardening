@@ -7,7 +7,7 @@ Collection tested on:
 
 ## Include Roles
 
-+ [secure_shell]()
++ [ssh](https://github.com/szorfein/ansible-collection-hardening/tree/devel/roles/ssh)
 
 ## Install
 
@@ -25,15 +25,3 @@ And with ansible-galaxy:
 Or just with:
 
     ansible-galaxy collection install git+https://github.com/szorfein/ansible-collection-hardening.git
-
-## Usage
-
-```yml
-- hosts: localhost
-  collections:
-    - szorfein.hardening
-  roles:
-    - szorfein.hardening.os
-  vars:
-    ssh_port: 44444
-```

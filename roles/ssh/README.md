@@ -1,9 +1,9 @@
-secure_shell
-=========
+ssh
+===
 
-Enhance Security of SSH. Default values pass audit by:
+A role that configures SSH with the best security options. The defaults pass audit scanners successfully:
 - [Lynis](https://cisofy.com/lynis/)
-- [Ssh-audit](https://github.com/jtesta/ssh-audit)
+- [ssh-audit](https://github.com/jtesta/ssh-audit)
 
 Links:
 - https://stribika.github.io/2015/01/04/secure-secure-shell.html
@@ -38,6 +38,9 @@ Role Variables
   - Default: `'no'`
 - `sshd_tcp_keep_alive`
   - Default: `'no'`
+- `sshd_x11_forwarding`
+  - Default: `'no'`
+
 
 To allow an user to use ssh, use `allowed_users`, they will be inserted in group called `ssh-user` by default.
 
@@ -54,8 +57,10 @@ Example Playbook
 
     - hosts: servers
       become: true
+      collections:
+        - szorfein.hardening
       roles:
-         - { role: szorfein.secure_shell, allowed_users: [ansible] }
+         - { role: szorfein.hardening.ssh, allowed_users: [ ansible ] }
 
 License
 -------
