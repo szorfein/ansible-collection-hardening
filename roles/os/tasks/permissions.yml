@@ -44,9 +44,6 @@
   ansible.builtin.file:
     mode: 0600
     path: '{{ item.path }}'
-    state: touch
-    modification_time: preserve
-    access_time: preserve
   loop: '{{ cron_directories.files }}'
 
 - name: get all home directories in /home

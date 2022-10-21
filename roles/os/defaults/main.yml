@@ -1,6 +1,13 @@
 ---
 # defaults file for szorfein.hardening.os
 os_fix_core_dumps: true
+os_fix_login_defs: true
 os_fix_permissions: true
 
-os_umask: '0027'
+os_umask: '027'
+
+# pass aging controls
+os_auth_pass_min_days: 7
+os_auth_pass_max_days: 180
+
+os_auth_crypt_rounds: 20000

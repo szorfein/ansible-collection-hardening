@@ -27,6 +27,9 @@
 - import_tasks: core_dumps.yml
   when: os_fix_core_dumps | bool
 
+- import_tasks: login_defs.yml
+  when: os_fix_login_defs | bool
+
 - name: umask to {{ os_umask }}
   ansible.builtin.lineinfile:
     path: /etc/profile

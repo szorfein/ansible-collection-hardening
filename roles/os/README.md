@@ -6,15 +6,23 @@ A brief description of the role goes here.
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+None.
 
 Role Variables
 --------------
 
 - `os_fix_core_dumps`
   - Default: `true`
+- `os_fix_core_login_defs`
+  - Default: `true`
 - `os_fix_permissions`
   - Default: `true`
+- `os_auth_crypt_rounds`
+  - Default: `20000`
+- `os_auth_pass_max_days`
+  - Default: `180`
+- `os_auth_pass_min_days`
+  - Default: `7`
 - `os_umask`
   - Default: `'027''
 
