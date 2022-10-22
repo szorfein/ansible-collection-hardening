@@ -4,6 +4,7 @@ os_fix_core_dumps: true
 os_fix_login_defs: true
 os_fix_pam: true
 os_fix_permissions: true
+os_fix_sysctl: true
 
 os_umask: '027'
 
@@ -12,3 +13,10 @@ os_auth_pass_min_days: 7
 os_auth_pass_max_days: 180
 
 os_auth_crypt_rounds: 20000
+
+os_sysctl_kernel_conf: '/etc/sysctl.d/kernel.conf'
+os_sysctl_network_conf: '/etc/sysctl.d/network.conf'
+os_sysctl_userspace_conf: '/etc/sysctl.d/userspace.conf'
+os_sysctl_kernel_rules: true
+os_sysctl_network_rules: true
+os_sysctl_userspace_rules: true

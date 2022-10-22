@@ -8,4 +8,3 @@
   ansible.builtin.template:
     src: pwquality.j2
     dest: '{{ pwquality_dest }}'
-  when: ansible_os_family != 'Void' # pwquality doesn't work yet on void musl

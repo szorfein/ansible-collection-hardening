@@ -9,6 +9,9 @@
       paths:
         - 'vars'
 
+- import_tasks: sysctl.yml
+  when: os_fix_sysctl | bool
+
 - import_tasks: pam.yml
   when: os_fix_pam | bool
 
