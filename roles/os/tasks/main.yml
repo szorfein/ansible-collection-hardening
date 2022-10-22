@@ -9,6 +9,9 @@
       paths:
         - 'vars'
 
+- import_tasks: pam.yml
+  when: os_fix_pam | bool
+
 - name: Entropy {{ entropy_pkgname }}
   package:
     name: '{{ entropy_pkgname }}'

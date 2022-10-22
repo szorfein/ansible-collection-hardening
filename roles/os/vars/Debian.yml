@@ -2,4 +2,6 @@
 entropy_pkgname: jitterentropy-rngd
 service_name: jitterentropy
 entropy_module: jitterentropy_rng
+pwquality_pkgname: libpam-pwquality
+pwquality_dest: /etc/security/pwquality.conf
 cmd_recompile_initrd: depmod -ae && update-initramfs -u
