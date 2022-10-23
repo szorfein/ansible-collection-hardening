@@ -12,6 +12,6 @@
     dest: /usr/lib/modules-load.d/jitterentropy.conf
   when: entropy_module is defined
 
-- name: Recompile initrd
+- name: update-initrd
   ansible.builtin.shell: '{{ cmd_recompile_initrd }}'
   when: cmd_recompile_initrd is defined

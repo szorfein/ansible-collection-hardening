@@ -51,6 +51,7 @@
     paths: /home/
     recurse: false
     file_type: directory
+    excludes: 'lost+found'
   register: home_directories
 
 - name: set ownership of /home directories to 0700

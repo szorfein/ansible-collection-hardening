@@ -2,6 +2,7 @@
 # defaults file for szorfein.hardening.os
 os_fix_core_dumps: true
 os_fix_login_defs: true
+os_fix_modprobe: true
 os_fix_pam: true
 os_fix_permissions: true
 os_fix_sysctl: true
@@ -20,3 +21,9 @@ os_sysctl_userspace_conf: '/etc/sysctl.d/userspace.conf'
 os_sysctl_kernel_rules: true
 os_sysctl_network_rules: true
 os_sysctl_userspace_rules: true
+
+os_modprobe_config_path: /etc/modprobe.d/30_config.conf
+os_modprobe_uninstall_path: /etc/modprobe.d/31_uninstall.conf
+os_modprobe_blacklist_path: /etc/modprobe.d/32_blacklist.conf
+os_modprobe_remove_bluetooth: false
+os_modprobe_blacklist_cdrom: true

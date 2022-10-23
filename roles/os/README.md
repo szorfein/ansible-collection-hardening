@@ -1,7 +1,12 @@
 szorfein.hardening.os
 =====================
 
-A brief description of the role goes here.
+- Block and blacklist ~50 modules with modprobe.
+- Hide processes currently running on the system for users.
+- Configure pam to use strong passwords with libpwquality.
+- Disable core dumps.
+- Corrects permission on sensitive files and directory.
+- Configures kernel parameters via sysctl.
 
 Requirements
 ------------
@@ -17,6 +22,8 @@ Role Variables
 - `os_fix_login_defs`
   - Default: `true`
   - Description: Configure /etc/login.defs, password AGE, ENCRYPT_METHOD, SHA_CRYPT_ROUNDS, UMASK...
+- `os_fix_modprobe`
+  - Default: `true`
 - `os_fix_pam`
   - Default: `true`
   - Description: Install pam-libpwquality and configure it.

@@ -9,6 +9,12 @@
       paths:
         - 'vars'
 
+- import_tasks: modprobe.yml
+  when: os_fix_modprobe | bool
+
+- import_tasks: permissions.yml
+  when: os_fix_permissions | bool
+
 - import_tasks: sysctl.yml
   when: os_fix_sysctl | bool
 
@@ -22,10 +28,7 @@
   notify:
     - Start Entropy Service
     - Load module jitterentropy
-    - Recompile initrd
-
-- import_tasks: permissions.yml
-  when: os_fix_permissions | bool
+    - update-initrd
 
 - name: Hidepid
   import_tasks: hidepid.yml
