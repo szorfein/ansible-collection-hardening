@@ -15,3 +15,6 @@
 - name: update-initrd
   ansible.builtin.shell: '{{ cmd_recompile_initrd }}'
   when: cmd_recompile_initrd is defined
+
+- name: update-grub
+  ansible.builtin.shell: grub-mkconfig -o /boot/grub/grub.cfg

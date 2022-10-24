@@ -6,6 +6,7 @@ os_fix_modprobe: true
 os_fix_pam: true
 os_fix_permissions: true
 os_fix_sysctl: true
+os_fix_cpu: true
 
 os_umask: '027'
 

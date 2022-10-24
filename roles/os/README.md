@@ -7,6 +7,7 @@ szorfein.hardening.os
 - Disable core dumps.
 - Corrects permission on sensitive files and directory.
 - Configures kernel parameters via sysctl.
+- Mitigate CPU vulnerabilities by install microcode and configure kernel cmdline.
 
 Requirements
 ------------
@@ -19,6 +20,8 @@ Role Variables
 - `os_fix_core_dumps`
   - Default: `true`
   - Description: Core dumps contain the recorded memory of a program, we stop it.
+- `os_fix_cpu`
+  - Default: `true`
 - `os_fix_login_defs`
   - Default: `true`
   - Description: Configure /etc/login.defs, password AGE, ENCRYPT_METHOD, SHA_CRYPT_ROUNDS, UMASK...
@@ -40,6 +43,9 @@ Role Variables
   - Default: `180`
 - `os_auth_pass_min_days`
   - Default: `7`
+- `os_mount_boot_cmd`
+  - Default: `None`
+  - Description: If need to mount a `/boot` and|or `/efi` partition before update Grub, type the full command, e.g: `mount /boot && mount -t vfat /efi`.
 - `os_umask`
   - Default: `'027'`
 

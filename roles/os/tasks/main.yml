@@ -9,6 +9,9 @@
       paths:
         - 'vars'
 
+- import_tasks: cpu.yml
+  when: os_fix_cpu | bool
+
 - import_tasks: modprobe.yml
   when: os_fix_modprobe | bool
 
