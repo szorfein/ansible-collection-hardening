@@ -1,0 +1,7 @@
+#!/bin/sh
+tor=""
+if egrep -q run /run/runit/supervise.tor/stat >/dev/null ; then
+  tor="--use-tor"
+fi
+exec /usr/local/bin/secure-time-sync $tor >/dev/null
+#sleep 10

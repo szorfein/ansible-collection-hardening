@@ -3,6 +3,7 @@
 os_fix_core_dumps: true
 os_fix_login_defs: true
 os_fix_modprobe: true
+os_fix_ntp: true
 os_fix_pam: true
 os_fix_permissions: true
 os_fix_sysctl: true

@@ -9,6 +9,9 @@
       paths:
         - 'vars'
 
+- import_tasks: secure-time-sync.yml
+  when: os_fix_ntp | bool
+
 - import_tasks: cpu.yml
   when: os_fix_cpu | bool
 

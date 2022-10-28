@@ -8,6 +8,7 @@ szorfein.hardening.os
 - Corrects permission on sensitive files and directory.
 - Configures kernel parameters via sysctl.
 - Mitigate CPU vulnerabilities by install microcode and configure kernel cmdline.
+- Replace [NTP](https://blog.hboeck.de/archives/863-Dont-update-NTP-stop-using-it.html) by [secure-time-sync](https://github.com/szorfein/secure-time-sync).
 
 Requirements
 ------------
@@ -26,6 +27,8 @@ Role Variables
   - Default: `true`
   - Description: Configure /etc/login.defs, password AGE, ENCRYPT_METHOD, SHA_CRYPT_ROUNDS, UMASK...
 - `os_fix_modprobe`
+  - Default: `true`
+- `os_fix_ntp`
   - Default: `true`
 - `os_fix_pam`
   - Default: `true`

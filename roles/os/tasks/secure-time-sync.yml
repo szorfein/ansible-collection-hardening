@@ -1,0 +1,53 @@
+---
+# tasks file for secure_time_sync
+- name: sts > get secure-time-sync
+  ansible.builtin.get_url:
+    dest: /usr/local/bin/secure-time-sync
+    url: https://raw.githubusercontent.com/szorfein/secure-time-sync/main/secure-time-sync.sh
+    checksum: sha256:9dde9b9cba77930d66d1a82651c377b5b7ea2bbc40f02e3490e575bac3dc5a96
+    mode: 0755
+
+- name: sts > installing dependencies
+  ansible.builtin.package:
+    name: curl
+    state: present
+
+- name: sts > adding systemd service
+  ansible.builtin.template:
+    src: secure-time-sync-systemd.service.j2
+    dest: /usr/lib/systemd/system/secure-time-sync.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Reload systemd
+    - Enable Sts
+  when: ansible_service_mgr == 'systemd'
+
+- name: sts > adding runit service
+  ansible.builtin.copy:
+    src: etc/sv/secure-time-sync
+    dest: /etc/sv/
+    directory_mode: yes
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+    - Enable Sts
+  when: ansible_service_mgr == 'runit'
+
+- include_tasks: secure-time-sync-tor.yml
+  when: use_tor is defined and use_tor | bool
+
+- include_tasks: secure-time-sync-apparmor.yml
+  when: ansible_apparmor.status == 'enabled'
+
+- name: sts > disable systemd NTP protocol
+  ansible.builtin.service:
+    name: '{{ item }}'
+    state: stopped
+    enabled: false
+  with_items:
+    - systemd-timesyncd
+  ignore_errors: true
+  when: ansible_service_mgr == 'systemd'
