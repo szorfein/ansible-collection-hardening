@@ -1,0 +1,11 @@
+---
+- name: creating a proc group
+  ansible.builtin.group:
+    name:  proc
+    state: present
+
+- name: editing /etc/fstab
+  ansible.builtin.lineinfile:
+    path: /etc/fstab
+    regexp: '^proc'
+    line: "proc /proc proc nosuid,nodev,noexec,hidepid=2,gid=proc 0 0\n"

@@ -1,0 +1,79 @@
+---
+- name: Ensure /etc/sysctl.d directory exists.
+  ansible.builtin.file:
+    path: /etc/sysctl.d
+    state: directory
+    mode: 0755
+
+- name: Enforcing kernel rules > {{ os_sysctl_kernel_conf }}
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    sysctl_file: "{{ os_sysctl_kernel_conf }}"
+  with_items:
+    - { name: 'kernel.kptr_restrict', value: '2' }
+    - { name: 'kernel.printk', value: '3 3 3 3' }
+    - { name: 'kernel.unprivileged_bpf_disabled', value: '1' }
+    - { name: 'kernel.kexec_load_disabled', value: '1' }
+    - { name: 'kernel.unprivileged_userns_clone', value: '0' }
+    - { name: 'kernel.perf_event_paranoid', value: '3' }
+    - { name: 'kernel.kexec_load_disabled', value: '1' }
+    - { name: 'dev.tty.ldisc_autoload', value: '0' }
+    - { name: 'kernel.core_uses_pid', value: '1' }
+    - { name: 'kernel.sysrq', value: '0' }
+    #- { name: 'kernel.modules_disabled', value: '0' } # Should be 1
+  ignore_errors: true
+  when: os_sysctl_kernel_rules | bool
+
+- name: Enforcing network rules > {{ os_sysctl_network_conf }}
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    sysctl_file: "{{ os_sysctl_network_conf }}"
+  with_items:
+    - { name: 'net.ipv4.tcp_syncookies', value: '1' }
+    - { name: 'net.ipv4.tcp_rfc1337', value: '1' }
+    - { name: 'net.ipv4.conf.all.rp_filter', value: '1' }
+    - { name: 'net.ipv4.conf.default.rp_filter', value: '1' }
+    - { name: 'net.ipv4.conf.all.accept_redirects', value: '0' }
+    - { name: 'net.ipv4.conf.default.accept_redirects', value: '0' }
+    - { name: 'net.ipv4.conf.all.secure_redirects', value: '0' }
+    - { name: 'net.ipv4.conf.default.secure_redirects', value: '0' }
+    - { name: 'net.ipv6.conf.all.accept_redirects', value: '0' }
+    - { name: 'net.ipv6.conf.default.accept_redirects', value: '0' }
+    - { name: 'net.ipv4.conf.all.send_redirects', value: '0' }
+    - { name: 'net.ipv4.conf.default.send_redirects', value: '0' }
+    - { name: 'net.ipv4.icmp_echo_ignore_all', value: '0' }
+    - { name: 'net.ipv4.conf.all.accept_source_route', value: '0' }
+    - { name: 'net.ipv4.conf.default.accept_source_route', value: '0' }
+    - { name: 'net.ipv6.conf.all.accept_source_route', value: '0' }
+    - { name: 'net.ipv6.conf.default.accept_source_route', value: '0' }
+    - { name: 'net.ipv6.conf.all.accept_ra', value: '0' }
+    - { name: 'net.ipv6.conf.default.accept_ra', value: '0' }
+    - { name: 'net.ipv4.tcp_sack', value: '0' }
+    - { name: 'net.ipv4.tcp_dsack', value: '0' }
+    - { name: 'net.ipv4.tcp_fack', value: '0' }
+    - { name: 'net.core.bpf_jit_harden', value: '2' }
+    - { name: 'net.ipv4.conf.all.log_martians', value: '1' }
+    - { name: 'net.ipv4.conf.default.log_martians', value: '1' }
+    - { name: 'net.ipv4.tcp_timestamps', value: '0' }
+  when: os_sysctl_network_rules | bool
+
+- name: Enforcing userspace rules > {{ os_sysctl_userspace_conf }}
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    sysctl_file: "{{ os_sysctl_userspace_conf }}"
+  with_items:
+    - { name: 'kernel.yama.ptrace_scope', value: '2' }
+    - { name: 'vm.mmap_rnd_bits', value: '32' }
+    - { name: 'vm.mmap_rnd_compat_bits', value: '16' }
+    - { name: 'fs.protected_symlinks', value: '1' }
+    - { name: 'fs.protected_hardlinks', value: '1' }
+    - { name: 'fs.protected_fifos', value: '2' }
+    - { name: 'fs.protected_regular', value: '2' }
+    - { name: 'fs.suid_dumpable', value: '0' }
+  when: os_sysctl_userspace_rules | bool

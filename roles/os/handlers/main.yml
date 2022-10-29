@@ -1,0 +1,54 @@
+---
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: ansible_service_mgr == 'systemd'
+
+- name: Start Entropy Service
+  ansible.builtin.service:
+    name: '{{ service_name }}'
+    state: started
+    enabled: true
+  when: service_name is defined
+
+- name: Load module jitterentropy
+  ansible.builtin.template:
+    src: entropy_mod.j2
+    dest: /usr/lib/modules-load.d/jitterentropy.conf
+  when: entropy_module is defined
+
+- name: update-initrd
+  ansible.builtin.shell: '{{ cmd_recompile_initrd }}'
+  when: cmd_recompile_initrd is defined
+
+- name: update-grub
+  ansible.builtin.shell: grub-mkconfig -o /boot/grub/grub.cfg
+
+- name: Start Tor
+  ansible.builtin.service:
+    name: tor
+    state: started
+    enabled: true
+
+- name: Enable Cronie
+  ansible.builtin.service:
+    name: cronie
+    state: started
+    enabled: true
+
+- name: Enable Sts
+  ansible.builtin.service:
+    name: secure-time-sync
+    state: started
+    enabled: true
+
+- name: Enable Sts with Tor
+  ansible.builtin.service:
+    name: secure-time-sync-with-tor
+    state: started
+    enabled: true
+
+- name: Restart Tor
+  ansible.builtin.service:
+    name: tor
+    state: restarted

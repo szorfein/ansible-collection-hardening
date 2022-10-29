@@ -1,0 +1,29 @@
+---
+- name: sts tor > install
+  ansible.builtin.package:
+    name: tor
+    state: present
+  notify:
+    - Start Tor
+
+- name: sts tor > config
+  ansible.builtin.lineinfile:
+    path: /etc/tor/torrc
+    regexp: '^SOCKSPort 9050'
+    line: 'SOCKSPort 9050'
+    state: present
+    validate: 'tor --verify-config -f %s'
+  notify:
+    - Restart Tor
+
+- name: sts tor > systemd service
+  ansible.builtin.template:
+    src: secure-time-sync-systemd-with-tor.service.j2
+    dest: /usr/lib/systemd/system/secure-time-sync-with-tor.service
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - Reload systemd
+    - Enable Sts with Tor
+  when: ansible_service_mgr == 'systemd'

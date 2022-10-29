@@ -1,0 +1,3 @@
+---
+entropy_pkgname: app-crypt/jitterentropy-rngd
+entropy_module: jitterentropy_rng
