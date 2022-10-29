@@ -28,3 +28,17 @@ And with ansible-galaxy:
 Or just with:
 
     ansible-galaxy collection install git+https://github.com/szorfein/ansible-collection-hardening.git
+
+## Example playbook
+
+```yml
+- hosts: localhost
+  collections:
+    - szorfein.hardening
+  roles:
+    - szorfein.hardening.os
+    - szorfein.hardening.ssh
+  vars:
+    os_fix_ntp: false
+    sshd_x11_forwarding: 'yes'
+```
