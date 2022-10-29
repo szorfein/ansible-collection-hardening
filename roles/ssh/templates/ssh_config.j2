@@ -1,0 +1,15 @@
+# https://github.com/stribika/stribika.github.io/wiki/Secure-Secure-Shell
+
+Host heroku.com
+  KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256
+  MACs {{ macs }}
+
+Host github.com
+  KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521
+  Ciphers chacha20-poly1305@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr,aes256-cbc,aes192-cbc,aes128-cbc
+  MACs hmac-sha2-256,hmac-sha2-512,hmac-sha1
+
+Host *
+  HostKeyAlgorithms {{ host_key_algorithms }}
+  Ciphers {{ ciphers }}
+  MACs {{ macs }}
