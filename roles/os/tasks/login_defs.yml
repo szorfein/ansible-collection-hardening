@@ -1,0 +1,25 @@
+---
+- name: login_defs > umask {{ os_umask }}
+  ansible.builtin.lineinfile:
+    path: /etc/login.defs
+    regexp: '^UMASK'
+    line: "UMASK {{ os_umask }}"
+
+- name: login_defs > setting PASS_{MIN/MAX}_DAYS
+  ansible.builtin.lineinfile:
+    path: /etc/login.defs
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+  with_items:
+    - { regexp: '^PASS_MIN_DAYS', line: 'PASS_MIN_DAYS {{ os_auth_pass_min_days }}' }
+    - { regexp: '^PASS_MAX_DAYS', line: 'PASS_MAX_DAYS {{ os_auth_pass_max_days }}' }
+
+- name: login_defs > setting SHA_CRYPT_{MIN/MAX}_ROUND
+  ansible.builtin.lineinfile:
+    path: /etc/login.defs
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+  with_items:
+    - { regexp: '^SHA_CRYPT_MIN_ROUNDS', line: 'SHA_CRYPT_MIN_ROUNDS {{ os_auth_crypt_rounds }}' }
+    - { regexp: '^SHA_CRYPT_MAX_ROUNDS', line: 'SHA_CRYPT_MAX_ROUNDS {{ os_auth_crypt_rounds }}' }
+

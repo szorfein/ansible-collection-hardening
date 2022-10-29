@@ -7,17 +7,20 @@ Collection tested on:
 
 ## Include Roles
 
-+ [secure_shell]()
++ [os](https://github.com/szorfein/ansible-collection-hardening/tree/main/roles/os)
++ [ssh](https://github.com/szorfein/ansible-collection-hardening/tree/main/roles/ssh)
 
 ## Install
 
 Edit or create a `requirements.yml`
+
 ```yml
 ---
 collections:
   - name: https://github.com/szorfein/ansible-collection-hardening.git
     type: git
 ```
+
 And with ansible-galaxy:
 
     ansible-galaxy install -r requirements.yml
@@ -26,7 +29,7 @@ Or just with:
 
     ansible-galaxy collection install git+https://github.com/szorfein/ansible-collection-hardening.git
 
-## Usage
+## Example playbook
 
 ```yml
 - hosts: localhost
@@ -34,6 +37,8 @@ Or just with:
     - szorfein.hardening
   roles:
     - szorfein.hardening.os
+    - szorfein.hardening.ssh
   vars:
-    ssh_port: 44444
+    os_fix_ntp: false
+    sshd_x11_forwarding: 'yes'
 ```

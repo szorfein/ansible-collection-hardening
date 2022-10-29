@@ -1,0 +1,88 @@
+---
+- name: Load OS-vars
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - '{{ ansible_os_family }}.yml'
+        - main.yml
+      paths:
+        - 'vars'
+
+- name: Creating group {{ sshd_allow_group }}
+  ansible.builtin.group:
+    name: "{{ sshd_allow_group }}"
+    state: present
+
+- name: Allowing {{ allowed_users }} to use SSH
+  ansible.builtin.user:
+    name: "{{ item }}"
+    groups: "{{ sshd_allow_group }}"
+    append: true
+  with_items: "{{ allowed_users }}"
+  when: allowed_users | length > 0
+  
+- name: Enable service {{ service_name }}
+  ansible.builtin.service:
+    name: "{{ service_name }}"
+    enabled: yes
+
+- name: Update SSHD config > {{ sshd_config_file }}
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config_file }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+    validate: 'sshd -t -f %s'
+    mode: '0600'
+    create: true
+  with_items:
+    - regexp: "^PasswordAuthentication"
+      line: "PasswordAuthentication {{ sshd_password_authentication }}"
+    - regexp: "^PermitRootLogin"
+      line: "PermitRootLogin {{ sshd_permit_root_login }}"
+    - regexp: "^AllowTcpForwarding"
+      line: "AllowTcpForwarding {{ sshd_allow_tcp_forwarding }}"
+    - regexp: "^ClientAliveCountMax"
+      line: "ClientAliveCountMax {{ sshd_client_alive_count_max }}"
+    - regexp: "^Compression"
+      line: "Compression {{ sshd_compression }}"
+    - regexp: "^MaxAuthTries"
+      line: "MaxAuthTries {{ sshd_max_auth_tries }}"
+    - regexp: "^MaxSessions"
+      line: "MaxSessions {{ sshd_max_sessions }}"
+    - regexp: "^TCPKeepAlive"
+      line: "TCPKeepAlive {{ sshd_tcp_keep_alive }}"
+    - regexp: "^AllowAgentForwarding"
+      line: "AllowAgentForwarding {{ sshd_allow_agent_forwarding }}"
+    - regexp: "^AllowGroups"
+      line: "AllowGroups {{ sshd_allow_group }}"
+    - regexp: "^KexAlgorithms"
+      line: "KexAlgorithms {{ kex_algorithms }}"
+    - regexp: "^Ciphers"
+      line: "Ciphers {{ ciphers }}"
+    - regexp: "^MACs"
+      line: "MACs {{ macs }}"
+    - regexp: "^HostKeyAlgorithms"
+      line: "HostKeyAlgorithms {{ host_key_algorithms }}"
+    - regexp: "^LogLevel"
+      line: "LogLevel {{ sshd_log_level }}"
+  notify: restart ssh
+
+- name: Global sshd
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^X11Forwarding"
+    line: "X11Forwarding {{ sshd_x11_forwarding }}"
+    state: present
+    validate: 'sshd -t -f %s'
+    mode: '0600'
+  notify: restart ssh
+
+- name: Configuring SSH > {{ ssh_config_file }}
+  template:
+    src: ssh_config.j2
+    dest: "{{ ssh_config_file }}"
+    owner: root
+    group: root
+    mode: '0644'

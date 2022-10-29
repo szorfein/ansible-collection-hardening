@@ -1,0 +1,11 @@
+---
+entropy_pkgname: haveged
+service_name: haveged
+pwquality_pkgname: libpwquality
+pwquality_dest: /etc/pam.d/passwd
+cmd_recompile_initrd: xbps-reconfigure -f $(xbps-query -l | grep {{ ansible_kernel }} | awk '{print $2}' | head -n1)
+
+os_cpu_kernel_hardening_path: /etc/default/grub
+os_cpu_grub_quiet_path: /etc/default/grub
+os_cpu_intel_microcode_pkgname: linux-firmware-intel
+os_cpu_amd_microcode_pkgname: linux-firmware-amd

@@ -1,0 +1,21 @@
+---
+- ansible.builtin.debug:
+    msg:
+      - 'Starting Appamor'
+
+- name: sts apparmor > dependencies
+  ansible.builtin.apt:
+    name: apparmor-utils
+    state: present
+  when: ansible_os_family == 'Debian'
+
+- name: sts apparmor > profile
+  ansible.builtin.get_url:
+    dest: /etc/apparmor.d/usr.bin.secure-time-sync
+    url: https://raw.githubusercontent.com/szorfein/secure-time-sync/main/usr.bin.secure-time-sync
+    checksum: sha256:c6e0a120ab9a7b577172e3b05a5f12f5520c18448e6ec533a4844d91895a4ed7
+    mode: 0644
+
+- name: sts apparmor > aa-enforce
+  ansible.builtin.shell: >
+    aa-enforce /etc/apparmor.d/usr.bin.secure-time-sync

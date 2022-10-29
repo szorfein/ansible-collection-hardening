@@ -1,0 +1,12 @@
+---
+entropy_pkgname: jitterentropy-rngd
+service_name: jitterentropy
+entropy_module: jitterentropy_rng
+pwquality_pkgname: libpam-pwquality
+pwquality_dest: /etc/security/pwquality.conf
+cmd_recompile_initrd: depmod -ae && update-initramfs -u
+
+os_cpu_kernel_hardening_path: /etc/default/grub.d/40_kernel_hardening.cfg
+os_cpu_grub_quiet_path: /etc/default/grub.d/41_quiet.cfg
+os_cpu_intel_microcode_pkgname: intel-microcode
+os_cpu_amd_microcode_pkgname: amd64-microcode

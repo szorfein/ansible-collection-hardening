@@ -1,0 +1,8 @@
+---
+entropy_pkgname: haveged
+service_name: haveged
+
+os_cpu_kernel_hardening_path: /etc/default/grub
+os_cpu_grub_quiet_path: /etc/default/grub
+os_cpu_intel_microcode_pkgname: intel-ucode
+os_cpu_amd_microcode_pkgname: amd-ucode
