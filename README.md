@@ -9,6 +9,7 @@ Collection tested on:
 
 + [os](https://github.com/szorfein/ansible-collection-hardening/tree/main/roles/os)
 + [ssh](https://github.com/szorfein/ansible-collection-hardening/tree/main/roles/ssh)
++ [auto](https://github.com/szorfein/ansible-collection-hardening/tree/main/roles/auto)
 
 ## Install
 
