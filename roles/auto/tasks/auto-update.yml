@@ -1,0 +1,49 @@
+---
+- name: auto-update > installing dependencies
+  ansible.builtin.package:
+    name: pacman-contrib
+    state: present
+  when: ansible_os_family == 'Archlinux'
+
+- name: auto-update > add the script auto-update
+  ansible.builtin.template:
+    src: auto-update.sh.j2
+    dest: /usr/local/bin/auto-update
+    owner: root
+    group: root
+    mode: 0700
+  when: ansible_os_family == 'Archlinux'
+
+- name: auto-update > add the config file
+  ansible.builtin.template:
+    src: auto-update-config.j2
+    dest: /etc/conf.d/auto-update
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_os_family == 'Archlinux'
+
+- name: auto-update > add the systemd service
+  ansible.builtin.template:
+    src: auto-update.service.j2
+    dest: /usr/lib/systemd/system/auto-update.service
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_os_family == 'Archlinux' and ansible_service_mgr == 'systemd'
+
+- name: auto-update > add the systemd timer
+  ansible.builtin.template:
+    src: auto-update.service.timer.j2
+    dest: /usr/lib/systemd/system/auto-update.timer
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_os_family == 'Archlinux' and ansible_service_mgr == 'systemd'
+
+- name: auto-update > enable service
+  ansible.builtin.service:
+    name: auto-update.timer
+    state: started
+    enabled: yes
+  when: ansible_os_family == 'Archlinux' and ansible_service_mgr == 'systemd'

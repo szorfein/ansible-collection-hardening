@@ -1,0 +1,14 @@
+[Unit]
+Description=Auto update for {{ ansible_os_family }}
+After=network.target
+RequiresMountsFor=/var/log /boot
+
+[Service]
+ExecStart=/usr/local/bin/auto-update
+Nice=19
+KillMode=process
+SendSIGKILL=no
+TimeoutStopSec=1800
+
+[Install]
+WantedBy=multi-user.target

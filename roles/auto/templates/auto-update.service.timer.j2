@@ -1,0 +1,10 @@
+[Unit]
+Description=Auto update timer for {{ ansible_os_family }}
+
+[Timer]
+OnBootSec=10min
+OnUnitInactiveSec=60min
+RandomizedDelaySec=10min
+
+[Install]
+WantedBy=timers.target

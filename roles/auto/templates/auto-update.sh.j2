@@ -1,0 +1,62 @@
+#!/usr/bin/env sh
+
+set -o errexit
+
+LOG={{ auto_update_logfile }}
+CONFIG={{ auto_update_configfile }}
+
+[ -f "$CONFIG" ] && . "$CONFIG"
+
+TODAY_YEAR="$(date +%Y)"
+TODAY_MONTH="$(date +%m)"
+TODAY_DAY="$(date +%d)"
+TODAY_FULL="$TODAY_YEAR:$TODAY_MONTH:$TODAY_DAY"
+
+if [ -n "$DOWNLOAD_PKGS" ] ; then echo "download set to $DOWNLOAD_PKGS DAY" ; fi
+
+die() { echo "[-] $1"; exit 1; }
+
+# arg 1: day1, arg 2: day2
+compare_to_today() {
+  NEXT=$(( $1 + $2 ))
+  echo "last $1, next = $NEXT, today = $TODAY_DAY"
+  if [ $NEXT -le $TODAY_DAY ] ; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+download_only_pkgs() {
+  echo "Download pkgs with $DOWNLOAD_PKGS_CMD"
+  $DOWNLOAD_PKGS_CMD
+  if [ "$?" -eq 0 ] ; then
+    sed -i '/last download/d' "$LOG"
+    echo "$TODAY_FULL > Last download success with $DOWNLOAD_PKGS_CMD." >> "$LOG"
+  else
+    echo "$TODAY_FULL > Last download failed with $DOWNLOAD_PKGS_CMD." >> "$LOG"
+  fi
+}
+
+check_download_only() {
+  if LAST_DOWNLOAD="$(grep -i "last download success" "$LOG" | awk '{print $1}')" ; then
+    IFS=: read -r _ _ d <<< $LAST_DOWNLOAD
+    if compare_to_today "$d" "$DOWNLOAD_PKGS" ; then
+      download_only_pkgs
+    else
+      echo "Next day maybe."
+    fi
+  else
+    download_only_pkgs
+  fi
+}
+
+main() {
+  [ "$(id -u)" -eq 0 ] || die "Need to be run as root !"
+
+  [ -f "$LOG" ] || touch "$LOG"
+
+  check_download_only
+}
+
+main "$@"

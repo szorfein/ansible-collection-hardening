@@ -1,2 +1,4 @@
 ---
 # tasks file for hardening.auto
+- import_tasks: auto-update.yml
+  when: auto_update | bool

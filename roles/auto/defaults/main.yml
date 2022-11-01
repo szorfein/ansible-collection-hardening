@@ -1,2 +1,4 @@
 ---
 # defaults file for hardening.auto
+auto_update: false
+auto_update_download_pkgs_day: 1
