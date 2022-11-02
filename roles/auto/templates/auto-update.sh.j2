@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-set -o errexit
+set -o errexit -o nounset
 
 LOG={{ auto_update_logfile }}
 CONFIG={{ auto_update_configfile }}
@@ -11,8 +11,6 @@ TODAY_YEAR="$(date +%Y)"
 TODAY_MONTH="$(date +%m)"
 TODAY_DAY="$(date +%d)"
 TODAY_FULL="$TODAY_YEAR:$TODAY_MONTH:$TODAY_DAY"
-
-if [ -n "$DOWNLOAD_PKGS" ] ; then echo "download set to $DOWNLOAD_PKGS DAY" ; fi
 
 die() { echo "[-] $1"; exit 1; }
 
@@ -27,28 +25,38 @@ compare_to_today() {
   fi
 }
 
-download_only_pkgs() {
-  echo "Download pkgs with $DOWNLOAD_PKGS_CMD"
-  $DOWNLOAD_PKGS_CMD
+exe() {
+  echo ">> $1 with $2"
+  $2
   if [ "$?" -eq 0 ] ; then
-    sed -i '/last download/d' "$LOG"
-    echo "$TODAY_FULL > Last download success with $DOWNLOAD_PKGS_CMD." >> "$LOG"
+    sed -i "/Last $1/d" "$LOG"
+    echo "$TODAY_FULL > Last $1 success with $2." >> "$LOG"
   else
-    echo "$TODAY_FULL > Last download failed with $DOWNLOAD_PKGS_CMD." >> "$LOG"
+    echo "$TODAY_FULL > Last $1 failed with $2." >> "$LOG"
   fi
 }
 
-check_download_only() {
-  if LAST_DOWNLOAD="$(grep -i "last download success" "$LOG" | awk '{print $1}')" ; then
-    IFS=: read -r _ _ d <<< $LAST_DOWNLOAD
-    if compare_to_today "$d" "$DOWNLOAD_PKGS" ; then
-      download_only_pkgs
+# do action if compare_to_today pass or logfile is empty
+checking() {
+  LAST_THING="$(grep -i "last $1 success" "$LOG" | awk '{print $1}')"
+  if [ -n "$LAST_THING" ] ; then
+    IFS=: read -r _ _ d <<< $LAST_THING
+    if compare_to_today "$d" "$2" ; then
+      exe "$1" "$3"
     else
       echo "Next day maybe."
     fi
   else
-    download_only_pkgs
+    exe "$1" "$3"
   fi
+}
+
+check_download_pkgs() {
+  checking "download pkgs" "$DOWNLOAD_PKGS_DAY" "$DOWNLOAD_PKGS_CMD"
+}
+
+check_clean_cache() {
+  checking "clean cache" "$CLEAN_CACHE_DAY" "$CLEAN_CACHE_CMD"
 }
 
 main() {
@@ -56,7 +64,8 @@ main() {
 
   [ -f "$LOG" ] || touch "$LOG"
 
-  check_download_only
+  check_download_pkgs
+  check_clean_cache
 }
 
 main "$@"

@@ -1,7 +1,7 @@
 szorfein.hardening.auto
 =======================
 
-A role to automatically do things via systemd or a cron job, like update.
+A role to automatically do things via systemd or a cron job, like system update.
 
 Requirements
 ------------
@@ -13,6 +13,12 @@ Role Variables
 
 - `auto_update`
   - Default: `false`
+- `auto_update_download_pkgs_day`
+  - Default: `1`
+  - Description: Downloads only pkgs on your system every n-day.
+- `auto_update_clean_cache_day`
+  - Default: `6`
+  - Description: Clean your installer (apt-get, pacman) cache every n-day.
 
 Dependencies
 ------------
@@ -22,11 +28,12 @@ A list of other roles hosted on Galaxy should go here, plus any details in regar
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
     - hosts: servers
+      become: true
+      collections:
+        - szorfein.hardening
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: auto, auto_update: true }
 
 License
 -------

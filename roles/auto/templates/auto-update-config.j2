@@ -1,3 +1,7 @@
-# Do "checkupdates -b" every n-days (0=disable)
-DOWNLOAD_PKGS="{{ auto_update_download_pkgs_day }}"
+# Do "{{ auto_update_download_pkgs_cmd }}" every n-days (0=disable)
+DOWNLOAD_PKGS_DAY="{{ auto_update_download_pkgs_day }}"
 DOWNLOAD_PKGS_CMD="{{ auto_update_download_pkgs_cmd }}"
+
+# Do "{{ auto_update_clean_cache_cmd }}" every n-days (0=disable)
+CLEAN_CACHE_DAY="{{ auto_update_clean_cache_day }}"
+CLEAN_CACHE_CMD="{{ auto_update_clean_cache_cmd }}"

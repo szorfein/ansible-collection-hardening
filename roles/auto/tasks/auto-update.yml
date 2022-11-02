@@ -17,7 +17,7 @@
 - name: auto-update > add the config file
   ansible.builtin.template:
     src: auto-update-config.j2
-    dest: /etc/conf.d/auto-update
+    dest: '{{ auto_update_configfile }}'
     owner: root
     group: root
     mode: 0644

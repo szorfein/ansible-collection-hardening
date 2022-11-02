@@ -3,3 +3,4 @@
 auto_update_logfile: /var/log/auto-update.log
 auto_update_configfile: /etc/conf.d/auto-update
 auto_update_download_pkgs_cmd: checkupdates -d
+auto_update_clean_cache_cmd: paccache -r
