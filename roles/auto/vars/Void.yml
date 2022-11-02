@@ -1,0 +1,7 @@
+---
+# vars file for hardening.auto
+auto_update_dependencie: cronie
+auto_update_logfile: /var/log/auto-update.log
+auto_update_configfile: /etc/default/auto-update
+auto_update_download_pkgs_cmd: xbps-install -SDu --yes
+auto_update_clean_cache_cmd: xbps-remove -O --yes

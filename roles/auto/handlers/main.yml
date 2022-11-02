@@ -1,2 +1,7 @@
 ---
 # handlers file for hardening.auto
+- name: start cron
+  ansible.builtin.service:
+    name: cronie
+    state: started
+    enabled: true

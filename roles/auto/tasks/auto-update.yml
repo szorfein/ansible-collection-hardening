@@ -1,9 +1,9 @@
 ---
 - name: auto-update > installing dependencies
   ansible.builtin.package:
-    name: pacman-contrib
+    name: '{{ auto_update_dependencie }}'
     state: present
-  when: ansible_os_family == 'Archlinux'
+  when: auto_update_dependencie is defined
 
 - name: auto-update > add the script auto-update
   ansible.builtin.template:
@@ -12,7 +12,7 @@
     owner: root
     group: root
     mode: 0700
-  when: ansible_os_family == 'Archlinux'
+  when: ansible_os_family == 'Archlinux' or ansible_os_family == 'Void'
 
 - name: auto-update > add the config file
   ansible.builtin.template:
@@ -21,7 +21,17 @@
     owner: root
     group: root
     mode: 0644
-  when: ansible_os_family == 'Archlinux'
+  when: ansible_os_family == 'Archlinux' or ansible_os_family == 'Void'
+
+- name: auto-update > add a cron task
+  ansible.builtin.cron:
+    name: auto-update
+    special_time: hourly
+    user: root
+    job: "/usr/local/bin/auto-update"
+  notify:
+    - start cron
+  when: ansible_os_family == 'Void'
 
 - name: auto-update > add the systemd service
   ansible.builtin.template:
