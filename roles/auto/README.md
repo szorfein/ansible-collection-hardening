@@ -16,6 +16,8 @@ Role Variables
 - `auto_update_download_pkgs_day`
   - Default: `1`
   - Description: Downloads only pkgs on your system every n-day.
+- `auto_update_upgrade_day`
+  - Default: `3`
 - `auto_update_clean_cache_day`
   - Default: `6`
   - Description: Clean your installer (apt-get, pacman) cache every n-day.

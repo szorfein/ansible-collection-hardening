@@ -3,3 +3,4 @@
 auto_update: false
 auto_update_download_pkgs_day: 1
 auto_update_clean_cache_day: 6
+auto_update_upgrade_day: 3

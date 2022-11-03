@@ -66,6 +66,10 @@ check_download_pkgs() {
   checking "download pkgs" "$DOWNLOAD_PKGS_DAY" "$DOWNLOAD_PKGS_CMD"
 }
 
+check_upgrade() {
+  checking "system upgrade" "$UPGRADE_DAY" "$UPGRADE_CMD"
+}
+
 check_clean_cache() {
   checking "clean cache" "$CLEAN_CACHE_DAY" "$CLEAN_CACHE_CMD"
 }
@@ -76,6 +80,7 @@ main() {
   [ -f "$LOG" ] || touch "$LOG"
 
   check_download_pkgs
+  check_upgrade
   check_clean_cache
 }
 

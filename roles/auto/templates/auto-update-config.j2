@@ -3,13 +3,13 @@
 APT::Periodic::Enable "1";
 
 // Do "apt-get update" automatically every n-days (0=disable)
-APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Update-Package-Lists "{{ auto_update_download_pkgs_day }}";
 
 // Do "apt-get upgrade --download-only" every n-days (0=disable)
 APT::Periodic::Download-Upgradeable-Packages "{{ auto_update_download_pkgs_day }}";
 
 // Run the "unattended-upgrade" security upgrade script every n-days (0=disabled)
-APT::Periodic::Unattended-Upgrade "1";
+APT::Periodic::Unattended-Upgrade "{{ auto_update_upgrade_day }}";
 
 // Do "apt-get autoclean" every n-days (0=disable)
 APT::Periodic::AutocleanInterval "{{ auto_update_clean_cache_day }}";
@@ -19,6 +19,10 @@ APT::Periodic::Verbose "2";
 # Do "{{ auto_update_download_pkgs_cmd }}" every n-days (0=disable)
 DOWNLOAD_PKGS_DAY="{{ auto_update_download_pkgs_day }}"
 DOWNLOAD_PKGS_CMD="{{ auto_update_download_pkgs_cmd }}"
+
+# Do "{{ auto_update_upgrade_cmd }}" every n-days (0=disable)
+UPGRADE_DAY="{{ auto_update_upgrade_day }}"
+UPGRADE_CMD="{{ auto_update_upgrade_cmd }}"
 
 # Do "{{ auto_update_clean_cache_cmd }}" every n-days (0=disable)
 CLEAN_CACHE_DAY="{{ auto_update_clean_cache_day }}"
