@@ -1,3 +1,21 @@
+{% if ansible_os_family == 'Debian' and auto_update %}
+// https://wiki.debian.org/UnattendedUpgrades
+APT::Periodic::Enable "1";
+
+// Do "apt-get update" automatically every n-days (0=disable)
+APT::Periodic::Update-Package-Lists "1";
+
+// Do "apt-get upgrade --download-only" every n-days (0=disable)
+APT::Periodic::Download-Upgradeable-Packages "{{ auto_update_download_pkgs_day }}";
+
+// Run the "unattended-upgrade" security upgrade script every n-days (0=disabled)
+APT::Periodic::Unattended-Upgrade "1";
+
+// Do "apt-get autoclean" every n-days (0=disable)
+APT::Periodic::AutocleanInterval "{{ auto_update_clean_cache_day }}";
+
+APT::Periodic::Verbose "2";
+{% elif ansible_os_family != 'Debian' %}
 # Do "{{ auto_update_download_pkgs_cmd }}" every n-days (0=disable)
 DOWNLOAD_PKGS_DAY="{{ auto_update_download_pkgs_day }}"
 DOWNLOAD_PKGS_CMD="{{ auto_update_download_pkgs_cmd }}"
@@ -5,3 +23,4 @@ DOWNLOAD_PKGS_CMD="{{ auto_update_download_pkgs_cmd }}"
 # Do "{{ auto_update_clean_cache_cmd }}" every n-days (0=disable)
 CLEAN_CACHE_DAY="{{ auto_update_clean_cache_day }}"
 CLEAN_CACHE_CMD="{{ auto_update_clean_cache_cmd }}"
+{% endif %}

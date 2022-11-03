@@ -1,0 +1,6 @@
+---
+auto_update_dependencie: unattended-upgrades
+auto_update_logfile:
+auto_update_configfile: /etc/apt/apt.conf.d/02periodic
+auto_update_download_pkgs_cmd:
+auto_update_clean_cache_cmd:

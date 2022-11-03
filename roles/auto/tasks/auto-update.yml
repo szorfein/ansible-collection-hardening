@@ -21,14 +21,22 @@
     owner: root
     group: root
     mode: 0644
-  when: ansible_os_family == 'Archlinux' or ansible_os_family == 'Void'
+
+- name: auto-update > config for unattended-upgrades
+  ansible.builtin.template:
+    src: 50unattended-upgrades.j2
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_os_family == 'Debian'
 
 - name: auto-update > add a cron task
   ansible.builtin.cron:
     name: auto-update
     special_time: hourly
     user: root
-    job: "/usr/local/bin/auto-update"
+    job: '/usr/local/bin/auto-update'
   notify:
     - start cron
   when: ansible_os_family == 'Void'
