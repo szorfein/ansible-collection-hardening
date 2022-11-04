@@ -4,6 +4,11 @@ set -o errexit -o nounset
 
 LOG={{ auto_update_logfile }}
 CONFIG={{ auto_update_configfile }}
+FSTAB=/etc/fstab
+ESP_DISK=""
+ESP_MOUNTPOINT=""
+BOOT_DISK=""
+GRUB_ID="GRUB"
 
 [ -f "$CONFIG" ] && . "$CONFIG"
 
@@ -25,15 +30,17 @@ compare_to_today() {
   fi
 }
 
+log_exe_failure() {
+  echo "$TODAY_FULL > Last $1 failed with $2." >> "$LOG"
+}
+
 exe() {
+  trap "log_exe_failure \"$1\" \"$2\"" ABRT ERR HUP INT QUIT TERM
+
   echo ">> $1 with $2"
   $2
-  if [ "$?" -eq 0 ] ; then
-    sed -i "/Last $1/d" "$LOG"
-    echo "$TODAY_FULL > Last $1 success with $2." >> "$LOG"
-  else
-    echo "$TODAY_FULL > Last $1 failed with $2." >> "$LOG"
-  fi
+  sed -i "/Last $1/d" "$LOG"
+  echo "$TODAY_FULL > Last $1 success with $2." >> "$LOG"
 }
 
 # https://github.com/dylanaraps/pure-sh-bible#split-a-string-on-a-delimiter
@@ -47,18 +54,110 @@ split_date() {
   set +f
 }
 
+check_efi() {
+  efi_dir=/sys/firmware/efi/efivars
+  if test -d "$efi_dir" ; then return 0 ; else return 1 ; fi
+}
+
+# check /etc/fstab for mountpoint /efi | /boot/efi or /boot format with FAT32
+check_esp() {
+  for p in $@ ; do
+    esp=$(grep -i "\s$p\s*vfat" "$FSTAB" | awk '{print $1}')
+    if [ -n "$esp" ] ; then
+      ESP_DISK="$(findfs $esp)"
+      ESP_MOUNTPOINT="$p"
+      echo "found esp ${ESP_DISK}"
+      echo "found esp mountpoint ${ESP_MOUNTPOINT}"
+      break
+    fi
+  done
+  if test -z "$ESP_DISK" ; then die "esp no found"; fi
+}
+
+# check /etc/fstab for mountpoint /boot or /
+check_boot() {
+  for p in $@ ; do
+    boot=$(grep -i "\s$p\s" "$FSTAB" | awk '{print $1}')
+    if [ -n "$boot" ] ; then
+      BOOT_DISK="$(findfs $boot)"
+      echo "found boot disk ${BOOT_DISK}"
+      break
+    fi
+  done
+  if test -z "$BOOT_DISK" ; then die "boot no found"; fi
+}
+
+# search if alrealy mounted of mount them
+add_mountpoint() {
+  for i in $@ ; do
+    if grep -q "\s$i\s" "$FSTAB" ; then
+      if ! grep -q "\s$i\s" /proc/mounts ; then
+        echo "mounting $1"
+        mount "$1"
+      fi
+    fi
+  done
+}
+
+pre_check_boot() {
+  if check_efi ; then
+    check_esp "/efi" "/boot/efi" "/boot"
+    add_mountpoint "/boot" # check for /boot first in case /boot/efi
+    add_mountpoint "$ESP_MOUNTPOINT"
+  else
+    check_boot "/boot" "/"
+    add_mountpoint "/boot" # only check for /boot
+  fi
+}
+
+log_grub_failure() {
+  echo "$TODAY_FULL > GRUB install failed." >> "$LOG"
+}
+
+install_grub() {
+  trap "log_grub_failure" ABRT ERR HUP INT QUIT TERM
+
+  if check_efi ; then
+    arch="$(uname -m)"
+    echo "UEFI grub - install on $ESP_MOUNTPOINT"
+    grub-install --target="$arch"-efi --efi-directory="$ESP_MOUNTPOINT" --bootloader-id="$GRUB_ID" --recheck
+  else
+    echo "BIOS grub - install on $BOOT_DISK"
+    grub-install "$BOOT_DISK"
+  fi
+  grub-mkconfig -o /boot/grub/grub.cfg
+
+  echo "$TODAY_FULL > GRUB install success." >> "$LOG"
+}
+
+upgrade_system() {
+  pre_check_boot
+  exe "$1" "$2"
+  if hash grub-mkconfig >/dev/null ; then
+    install_grub
+  fi
+}
+
 # do action if compare_to_today pass or logfile is empty
 checking() {
   LAST_THING="$(grep -i "last $1 success" "$LOG" | awk '{print $1}')"
   if [ -n "$LAST_THING" ] ; then
     split_date "$LAST_THING"
     if compare_to_today "$day" "$2" ; then
-      exe "$1" "$3"
+      if [ "$1" = "system upgrade" ] ; then
+        upgrade_system "$1" "$3"
+      else
+        exe "$1" "$3"
+      fi
     else
       echo "Next day maybe."
     fi
   else
-    exe "$1" "$3"
+    if [ "$1" = "system upgrade" ] ; then
+      upgrade_system "$1" "$3"
+    else
+      exe "$1" "$3"
+    fi
   fi
 }
 
@@ -70,8 +169,8 @@ check_upgrade() {
   checking "system upgrade" "$UPGRADE_DAY" "$UPGRADE_CMD"
 }
 
-check_clean_cache() {
-  checking "clean cache" "$CLEAN_CACHE_DAY" "$CLEAN_CACHE_CMD"
+check_clean() {
+  checking "clean cache" "$CLEAN_DAY" "$CLEAN_CACHE_CMD"
 }
 
 main() {
@@ -81,7 +180,7 @@ main() {
 
   check_download_pkgs
   check_upgrade
-  check_clean_cache
+  check_clean
 }
 
 main "$@"

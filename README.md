@@ -1,15 +1,15 @@
 # Ansible Collection - szorfein.hardening
 
 Collection tested on:
-+ Debian 11
 + Archlinux
++ Debian 11
 + Voidlinux
 
 ## Include Roles
 
++ [auto](https://github.com/szorfein/ansible-collection-hardening/tree/main/roles/auto)
 + [os](https://github.com/szorfein/ansible-collection-hardening/tree/main/roles/os)
 + [ssh](https://github.com/szorfein/ansible-collection-hardening/tree/main/roles/ssh)
-+ [auto](https://github.com/szorfein/ansible-collection-hardening/tree/main/roles/auto)
 
 ## Install
 
@@ -39,7 +39,9 @@ Or just with:
   roles:
     - szorfein.hardening.os
     - szorfein.hardening.ssh
+    - szorfein.hardening.auto
   vars:
     os_fix_ntp: false
     sshd_x11_forwarding: 'yes'
+    auto_update: true
 ```
