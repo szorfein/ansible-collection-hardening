@@ -35,7 +35,7 @@ log_exe_failure() {
 }
 
 exe() {
-  trap "log_exe_failure \"$1\" \"$2\"" ABRT ERR HUP INT QUIT TERM
+  trap "log_exe_failure \"$1\" \"$2\"" ABRT HUP INT QUIT TERM
 
   echo ">> $1 with $2"
   $2
@@ -115,7 +115,7 @@ log_grub_failure() {
 }
 
 install_grub() {
-  trap "log_grub_failure" ABRT ERR HUP INT QUIT TERM
+  trap "log_grub_failure" ABRT HUP INT QUIT TERM
 
   if check_efi ; then
     arch="$(uname -m)"
@@ -130,12 +130,29 @@ install_grub() {
   echo "$TODAY_FULL > GRUB install success." >> "$LOG"
 }
 
+sync_system() {
+  exe "download pkgs" "$DOWNLOAD_PKGS_CMD"
+}
+
 upgrade_system() {
   pre_check_boot
-  exe "$1" "$2"
+  exe "system upgrade" "$UPGRADE_CMD"
   if hash grub-mkconfig >/dev/null ; then
     install_grub
   fi
+}
+
+clean_system() {
+  {% if auto_update_clean_orphan_cmd is defined %}
+  {{ auto_update_clean_orphan_cmd }}
+  {% endif %}
+
+  {% if ansible_os_family == 'Archlinux' %}
+  orphan="$(pacman -Qtdq || true)"
+  if [ -n "$orphan" ] ; then pacman -Rns --noconfirm "$orphan" ; fi
+  {% endif %}
+
+  exe "clean cache" "$CLEAN_CACHE_CMD"
 }
 
 # do action if compare_to_today pass or logfile is empty
@@ -144,33 +161,32 @@ checking() {
   if [ -n "$LAST_THING" ] ; then
     split_date "$LAST_THING"
     if compare_to_today "$day" "$2" ; then
-      if [ "$1" = "system upgrade" ] ; then
-        upgrade_system "$1" "$3"
-      else
-        exe "$1" "$3"
-      fi
+      return 0
     else
-      echo "Next day maybe."
+      echo "next day maybe."
+      return 1
     fi
   else
-    if [ "$1" = "system upgrade" ] ; then
-      upgrade_system "$1" "$3"
-    else
-      exe "$1" "$3"
-    fi
+    return 0
   fi
 }
 
 check_download_pkgs() {
-  checking "download pkgs" "$DOWNLOAD_PKGS_DAY" "$DOWNLOAD_PKGS_CMD"
+  if checking "download pkgs" "$DOWNLOAD_PKGS_DAY" ; then
+    sync_system
+  fi
 }
 
 check_upgrade() {
-  checking "system upgrade" "$UPGRADE_DAY" "$UPGRADE_CMD"
+  if checking "system upgrade" "$UPGRADE_DAY" ; then
+    upgrade_system
+  fi
 }
 
 check_clean() {
-  checking "clean cache" "$CLEAN_DAY" "$CLEAN_CACHE_CMD"
+  if checking "clean cache" "$CLEAN_DAY" ; then
+    clean_system
+  fi
 }
 
 main() {
