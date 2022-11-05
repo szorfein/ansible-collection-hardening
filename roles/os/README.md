@@ -46,6 +46,9 @@ Role Variables
   - Default: `180`
 - `os_auth_pass_min_days`
   - Default: `7`
+- `os_modules`
+  - Default: `false`
+  - Description: use sysctl `kernel.modules_disabled` and loads a tiny list of modules.
 - `os_mount_boot_cmd`
   - Default: `None`
   - Description: If need to mount a `/boot` and|or `/efi` partition before update Grub, type the full command, e.g: `mount /boot && mount -t vfat /efi`.

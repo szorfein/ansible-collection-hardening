@@ -9,23 +9,26 @@
       paths:
         - 'vars'
 
-- import_tasks: secure-time-sync.yml
-  when: os_fix_ntp | bool
+- import_tasks: modules.yml
+  when: os_modules | bool
 
-- import_tasks: cpu.yml
-  when: os_fix_cpu | bool
+    #- import_tasks: secure-time-sync.yml
+    #  when: os_fix_ntp | bool
 
-- import_tasks: modprobe.yml
-  when: os_fix_modprobe | bool
+    #- import_tasks: cpu.yml
+    #  when: os_fix_cpu | bool
 
-- import_tasks: permissions.yml
-  when: os_fix_permissions | bool
+    #- import_tasks: modprobe.yml
+    #  when: os_fix_modprobe | bool
 
-- import_tasks: sysctl.yml
-  when: os_fix_sysctl | bool
+    #- import_tasks: permissions.yml
+    #  when: os_fix_permissions | bool
 
-- import_tasks: pam.yml
-  when: os_fix_pam | bool
+    #- import_tasks: sysctl.yml
+    #  when: os_fix_sysctl | bool
+
+    #- import_tasks: pam.yml
+    #  when: os_fix_pam | bool
 
 - name: Entropy {{ entropy_pkgname }}
   package:
@@ -36,14 +39,14 @@
     - Load module jitterentropy
     - update-initrd
 
-- name: Hidepid
-  import_tasks: hidepid.yml
+      #- name: Hidepid
+      #  import_tasks: hidepid.yml
 
-- import_tasks: core_dumps.yml
-  when: os_fix_core_dumps | bool
+      #- import_tasks: core_dumps.yml
+      #  when: os_fix_core_dumps | bool
 
-- import_tasks: login_defs.yml
-  when: os_fix_login_defs | bool
+      #- import_tasks: login_defs.yml
+      #  when: os_fix_login_defs | bool
 
 - name: umask to {{ os_umask }}
   ansible.builtin.lineinfile:

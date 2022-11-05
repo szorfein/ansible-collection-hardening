@@ -1,0 +1,25 @@
+---
+- name: modules > loading
+  ansible.builtin.debug:
+    msg: 
+      - 'Modules Start'
+
+- name: modules > block modules load at boot
+  ansible.posix.sysctl:
+    name: 'kernel.modules_disabled'
+    value: '1'
+    sysctl_file: '{{ os_sysctl_kernel_conf }}'
+    reload: no
+  notify:
+    - update-initrd
+
+- name: modules > add the list of modules to load at boot
+  ansible.builtin.template:
+    src: modules-load.j2
+    dest: '{{ os_modules_load_path }}'
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - update-initrd
+  when: os_modules_load_path is defined

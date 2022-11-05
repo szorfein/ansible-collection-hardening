@@ -24,6 +24,8 @@ os_sysctl_kernel_rules: true
 os_sysctl_network_rules: true
 os_sysctl_userspace_rules: true
 
+os_modules: false
+
 os_modprobe_config_path: /etc/modprobe.d/30_config.conf
 os_modprobe_uninstall_path: /etc/modprobe.d/31_uninstall.conf
 os_modprobe_blacklist_path: /etc/modprobe.d/32_blacklist.conf

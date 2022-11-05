@@ -1,0 +1,61 @@
+# {{ os_modules_load_path }}
+
+{% if ansible_architecture == 'x86_64' %}
+{% endif %}
+
+{% if 'AuthenticAMD' in ansible_facts.processor %}
+kvm-amd
+{% endif %}
+
+{% if 'GenuineIntel' in ansible_facts.processor %}
+ghash-clmulni-intel
+aesni-intel
+kvm-intel
+{% endif %}
+
+kvm
+
+# Network
+{% for int in ansible_interfaces %}
+{% if ansible_facts[int].module is defined %}
+{{ ansible_facts[int].module }}
+{% endif %}
+
+{% if int.startswith('wl') and ansible_facts[int].active %}
+# Wifi
+rfkill
+{% endif %}
+{% endfor %}
+
+{% if ansible_form_factor == 'Desktop' %}
+# Desktop
+psmouse
+snd
+snd_pcm
+snd_timer
+soundcore
+usbhid
+{% endif %}
+
+{% if ansible_system_vendor == 'QEMU' %}
+# QEMU stuff
+virtio_balloon
+virtio_gpu
+virtio_input
+virtio_rng
+{% endif %}
+
+# netfilter
+ip_tables
+x_tables
+iptable_filter
+iptable_nat
+
+ipt_LOG
+ipt_REJECT
+
+xt_tcpudp
+xt_conntrack
+nf_conntrack
+nf_defrag_ipv4
+nf_nat
