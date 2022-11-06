@@ -15,6 +15,11 @@ kvm-intel
 
 kvm
 
+# Filesystem
+{% if efi_installed %}
+vfat
+{% endif %}
+
 # Network
 {% for int in ansible_interfaces %}
 {% if ansible_facts[int].module is defined %}
@@ -24,6 +29,17 @@ kvm
 {% if int.startswith('wl') and ansible_facts[int].active %}
 # Wifi
 rfkill
+gcm
+ccm
+algif_aead
+des_generic
+cbc
+ecb
+algif_skcipher
+cmac
+md4
+algif_hash
+af_alg
 {% endif %}
 {% endfor %}
 
@@ -32,6 +48,7 @@ rfkill
 psmouse
 snd
 snd_pcm
+snd_hda_intel
 snd_timer
 soundcore
 usbhid
@@ -50,12 +67,16 @@ ip_tables
 x_tables
 iptable_filter
 iptable_nat
+iptable_mangle
 
 ipt_LOG
 ipt_REJECT
 
 xt_tcpudp
 xt_conntrack
+xt_REDIRECT
+xt_owner
 nf_conntrack
 nf_defrag_ipv4
+nf_reject_ipv4
 nf_nat

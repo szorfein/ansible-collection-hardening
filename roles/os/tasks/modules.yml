@@ -1,8 +1,12 @@
 ---
-- name: modules > loading
-  ansible.builtin.debug:
-    msg: 
-      - 'Modules Start'
+- name: modules > check if efi is installed
+  stat:
+    path: "/sys/firmware/efi"
+  register: efi_installed
+
+- name: modules > setting efi fact
+  ansible.builtin.set_fact:
+    efi_installed: efi_installed.stat.isdir
 
 - name: modules > block modules load at boot
   ansible.posix.sysctl:
