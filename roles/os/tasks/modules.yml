@@ -33,6 +33,17 @@
     - update-initrd
   when: os_modules_load_path is defined
 
+- name: modules > disable btrfs
+  ansible.builtin.lineinfile:
+    dest: '{{ os_modules_load_path }}'
+    line: '{{ item }}'
+    state: absent
+  with_items:
+    - xor
+    - raid6_pq
+    - btrfs
+  when: os_modules_disable_btrfs | bool
+
 - name: modules > enable kernel.modules_disabled
   ansible.posix.sysctl:
     name: 'kernel.modules_disabled'

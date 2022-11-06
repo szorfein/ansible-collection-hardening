@@ -53,6 +53,8 @@ Role Variables
   - Default: `true`
 - `os_modules_disable_bluetooth`
   - Default: `false`
+- `os_modules_disable_btrfs`
+  - Default: `false`
 - `os_mount_boot_cmd`
   - Default: `None`
   - Description: If need to mount a `/boot` and|or `/efi` partition before update Grub, type the full command, e.g: `mount /boot && mount -t vfat /efi`.

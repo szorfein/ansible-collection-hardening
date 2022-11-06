@@ -58,3 +58,7 @@ blacklist udlfb
 blacklist cdrom
 blacklist sr_mod
 {% endif %}
+
+{% if os_modules_disable_btrfs %}
+blacklist btrfs
+{% endif %}
