@@ -49,6 +49,10 @@ Role Variables
 - `os_modules`
   - Default: `false`
   - Description: use sysctl `kernel.modules_disabled` and loads a tiny list of modules.
+- `os_modules_disable_cdrom`
+  - Default: `true`
+- `os_modules_disable_bluetooth`
+  - Default: `false`
 - `os_mount_boot_cmd`
   - Default: `None`
   - Description: If need to mount a `/boot` and|or `/efi` partition before update Grub, type the full command, e.g: `mount /boot && mount -t vfat /efi`.

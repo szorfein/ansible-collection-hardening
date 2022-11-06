@@ -2,7 +2,7 @@
 ## https://forums.whonix.org/t/blacklist-more-kernel-modules-to-reduce-attack-surface/7989
 ## https://madaidans-insecurities.github.io/guides/linux-hardening.html#kasr-kernel-modules
 
-{% if os_modprobe_remove_bluetooth %}
+{% if os_modules_disable_bluetooth %}
 ## Disable bluetooth to reduce attack surface due to extended history of security vulnerabilities
 ## https://en.wikipedia.org/wiki/Bluetooth#History_of_security_concerns
 install bluetooth /bin/false >&2

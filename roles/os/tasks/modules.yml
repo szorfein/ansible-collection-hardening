@@ -1,14 +1,39 @@
 ---
-- name: modules > check if efi is installed
-  stat:
-    path: "/sys/firmware/efi"
-  register: efi_installed
+- name: modules > disable obscure network protocol
+  community.general.modprobe:
+    name: '{{ item }}'
+    state: absent
+  with_items:
+    - dccp
+    - sctp
+    - rds
+    - tipc
+    - pcspkr
+    - mei_pxp
+    - mei_hdcp
+    - mei_txe
+    - mei-me
+    - mei
 
-- name: modules > setting efi fact
-  ansible.builtin.set_fact:
-    efi_installed: efi_installed.stat.isdir
+- name: modules > disable bluetooth
+  community.general.modprobe:
+    name: '{{ item }}'
+    state: absent
+  with_items:
+    - hci_vhci
+    - hci_uart
+    - btusb
+    - bluetooth
+  when: os_modules_disable_bluetooth | bool
 
-- name: modules > block modules load at boot
+- name: modules > saving current modules used
+  ansible.builtin.shell:
+    cat /proc/modules | sort | awk '{print $1}' > {{ os_modules_load_path }}
+  notify:
+    - update-initrd
+  when: os_modules_load_path is defined
+
+- name: modules > enable kernel.modules_disabled
   ansible.posix.sysctl:
     name: 'kernel.modules_disabled'
     value: '1'
@@ -16,14 +41,3 @@
     reload: no
   notify:
     - update-initrd
-
-- name: modules > add the list of modules to load at boot
-  ansible.builtin.template:
-    src: modules-load.j2
-    dest: '{{ os_modules_load_path }}'
-    owner: root
-    group: root
-    mode: 0644
-  notify:
-    - update-initrd
-  when: os_modules_load_path is defined

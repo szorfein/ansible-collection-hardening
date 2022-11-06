@@ -51,7 +51,7 @@ blacklist viafb
 blacklist vt8623fb
 blacklist udlfb
 
-{% if os_modprobe_blacklist_cdrom %}
+{% if os_modules_disable_cdrom %}
 ## Disable CD-ROM devices
 ## https://nvd.nist.gov/vuln/detail/CVE-2018-11506
 ## https://forums.whonix.org/t/blacklist-more-kernel-modules-to-reduce-attack-surface/7989/31

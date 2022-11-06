@@ -1,35 +1,7 @@
 ---
-- name: debug
-  ansible.builtin.debug:
+- ansible.builtin.debug:
     msg:
       - "cmd: '{{ cmd_recompile_initrd }}'"
-
-- name: unload
-  community.general.modprobe:
-    name: '{{ item }}'
-    state: absent
-  with_items:
-    - dccp
-    - sctp
-    - rds
-    - tipc
-    - pcspkr
-    - mei_pxp
-    - mei_hdcp
-    - mei_txe
-    - mei-me
-    - mei
-
-- name: unload bluetooth
-  community.general.modprobe:
-    name: '{{ item }}'
-    state: absent
-  with_items:
-    - hci_vhci
-    - hci_uart
-    - btusb
-    - bluetooth
-  when: os_modprobe_remove_bluetooth | bool
 
 - name: configure > {{ os_modprobe_config_path }}
   ansible.builtin.template:
