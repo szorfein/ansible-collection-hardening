@@ -1,4 +1,13 @@
 ---
+- name: modules > search efi system
+  ansible.builtin.stat:
+    path: /sys/firmware/efi
+  register: efi_installed
+
+- name: modules > setting efi fact
+  ansible.builtin.set_fact:
+    efi_installed: efi_installed.stat.isdir is defined and efi_installed.isdir
+
 - name: modules > disable obscure network protocol
   community.general.modprobe:
     name: '{{ item }}'
@@ -32,6 +41,12 @@
   notify:
     - update-initrd
   when: os_modules_load_path is defined
+
+- name: modules > add vfat for efi
+  ansible.builtin.lineinfile:
+    dest: '{{ os_modules_load_path }}'
+    line: 'vfat'
+  when: efi_installed
 
 - name: modules > disable audio
   ansible.builtin.lineinfile:

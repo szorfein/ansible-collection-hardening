@@ -1,7 +1,7 @@
 szorfein.hardening.os
 =====================
 
-- Block and blacklist ~50 modules with modprobe.
+- Block and blacklist ~150 modules with modprobe.
 - Hide processes currently running on the system for users.
 - Configure pam to use strong passwords with libpwquality.
 - Disable core dumps.
@@ -35,7 +35,7 @@ Role Variables
   - Description: Install pam-libpwquality and configure it.
 - `os_fix_permissions`
   - Default: `true`
-  - Description: Use a lot of 0600 and 0700 on sensitive files.
+  - Description: Use a lot of 0600 and 0700 on sensitive files and directory.
 - `os_fix_sysctl`
   - Default: `true`
   - Description: Apply hardened rules with sysctl.
@@ -77,7 +77,7 @@ Example Playbook
       collections:
         - szorfein.hardening
       roles:
-         - { role: szorfein.hardening.os, os_auth_crypt_rounds: 65536 }
+         - { role: os, os_auth_crypt_rounds: 65536 }
 
 License
 -------
