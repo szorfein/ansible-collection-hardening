@@ -77,3 +77,10 @@ install vivid /bin/false >&2
 ## https://www.kernel.org/doc/html/latest/driver-api/mei/mei.html
 install mei /bin/false >&2
 install mei-me /bin/false >&2
+
+{% if os_modules_disable_camera %}
+# Block camera
+{% for item in os_modules_items_camera %}
+install {{ item }} /bin/true
+{% endfor %}
+{% endif %}

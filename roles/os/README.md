@@ -55,6 +55,8 @@ Role Variables
   - Default: `false`
 - `os_modules_disable_btrfs`
   - Default: `false`
+- `os_modules_disable_camera`
+  - Default: `false`
 - `os_modules_disable_cdrom`
   - Default: `true`
 - `os_mount_boot_cmd`

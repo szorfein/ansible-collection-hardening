@@ -26,6 +26,7 @@ os_sysctl_userspace_rules: true
 
 os_modules: false
 os_modules_disable_audio: false
+os_modules_disable_camera: false
 os_modules_disable_bluetooth: false
 os_modules_disable_btrfs: false
 os_modules_disable_cdrom: true
@@ -48,8 +49,20 @@ os_modules_items_audio:
   - snd_pcm
   - snd_timer
   - snd_compress
+  - snd_seq_device
+  - snd_seq
   - snd
   - soundcore
+
+os_modules_items_camera:
+  - uvcvideo
+  - mc
+  - videobuf2-common
+  - videobuf2-memops
+  - videobuf2-v4l2
+  - videobuf2-vmalloc
+  - videodev
+  - atomisp_gmin_platform
 
 os_modprobe_config_path: /etc/modprobe.d/30_config.conf
 os_modprobe_uninstall_path: /etc/modprobe.d/31_uninstall.conf
