@@ -33,6 +33,14 @@
     - update-initrd
   when: os_modules_load_path is defined
 
+- name: modules > disable audio
+  ansible.builtin.lineinfile:
+    dest: '{{ os_modules_load_path }}'
+    line: '{{ item }}'
+    state: absent
+  with_items: os_modules_items_audio
+  when: os_modules_disable_audio | bool
+
 - name: modules > disable btrfs
   ansible.builtin.lineinfile:
     dest: '{{ os_modules_load_path }}'

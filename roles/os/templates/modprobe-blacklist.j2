@@ -59,6 +59,13 @@ blacklist cdrom
 blacklist sr_mod
 {% endif %}
 
+{% if os_modules_disable_audio %}
+## Blacklist audio
+{% for item in os_modules_items_audio %}
+blacklist {{ item }}
+{% endfor %}
+{% endif %}
+
 {% if os_modules_disable_btrfs %}
 blacklist btrfs
 {% endif %}

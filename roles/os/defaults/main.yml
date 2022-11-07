@@ -25,9 +25,31 @@ os_sysctl_network_rules: true
 os_sysctl_userspace_rules: true
 
 os_modules: false
+os_modules_disable_audio: false
 os_modules_disable_bluetooth: false
-os_modules_disable_cdrom: true
 os_modules_disable_btrfs: false
+os_modules_disable_cdrom: true
+os_modules_items_audio:
+  - soundwire_intel
+  - soundwire_cadence
+  - soundwire_generic_allocation
+  - soundwire_bus
+  - snd_hda_codec_via
+  - snd_hda_codec_generic
+  - ledtrig_audio
+  - snd_hda_intel
+  - snd_intel_dspcfg
+  - snd_intel_sdw_acpi
+  - snd_hda_codec_hdmi
+  - snd_hda_codec
+  - snd_hda_core
+  - snd_soc_core
+  - snd_hwdep
+  - snd_pcm
+  - snd_timer
+  - snd_compress
+  - snd
+  - soundcore
 
 os_modprobe_config_path: /etc/modprobe.d/30_config.conf
 os_modprobe_uninstall_path: /etc/modprobe.d/31_uninstall.conf
