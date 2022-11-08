@@ -45,7 +45,11 @@
 - name: modules > add vfat for efi
   ansible.builtin.lineinfile:
     dest: '{{ os_modules_load_path }}'
-    line: 'vfat'
+    line: '{{ item }}'
+  with_items:
+    - vfat
+    - nls_cp437
+    - nls_iso8859_1
   when: efi_installed
 
 - name: modules > disable audio
