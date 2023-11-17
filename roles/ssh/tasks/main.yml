@@ -82,6 +82,7 @@
   notify: restart ssh
 
 - name: Configuring SSH > {{ ssh_config_file }}
+  become: true
   template:
     src: ssh_config.j2
     dest: "{{ ssh_config_file }}"
