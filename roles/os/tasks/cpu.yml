@@ -16,23 +16,19 @@
     - deb http://deb.debian.org/debian bullseye-updates main contrib non-free
   when: ansible_os_family == 'Debian'
 
+- name: Update Pacman cache
+  community.general.pacman:
+    update_cache: true
+  when: ansible_os_family == 'Archlinux'
+
 - name: install Intel microcode
   ansible.builtin.package:
     name: '{{ os_cpu_intel_microcode_pkgname }}'
-    state: present
+    state: latest
   when: ansible_processor[1] == 'GenuineIntel'
 
 - name: install Amd microcode
   ansible.builtin.package:
     name: '{{ os_cpu_amd_microcode_pkgname }}'
-    state: present
+    state: latest
   when: ansible_processor[1] == 'AuthenticAMD'
-
-- ansible.builtin.shell: hash grub-install
-  register: grub_install
-  ignore_errors: true
-
-- name: importing Grub tasks
-  ansible.builtin.import_tasks: grub.yml
-  when: grub_install is succeeded
-  # when: grub_install is failed

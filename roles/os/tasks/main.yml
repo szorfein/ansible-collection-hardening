@@ -9,11 +9,22 @@
       paths:
         - 'vars'
 
+- name: search for Grub
+  ansible.builtin.shell: hash grub-mkconfig 2>/dev/null
+  register: has_grub
+  ignore_errors: true
+
 - import_tasks: secure-time-sync.yml
   when: os_fix_ntp | bool
 
 - import_tasks: cpu.yml
-  when: os_fix_cpu | bool
+  become: true
+  notify:
+    - update-grub
+  when: os_fix_cpu_microcode | bool
+
+- import_tasks: cmdline_grub.yml
+  when: os_fix_cmdline_grub | bool
 
 - import_tasks: modprobe.yml
   when: os_fix_modprobe | bool
@@ -22,6 +33,7 @@
   when: os_fix_permissions | bool
 
 - import_tasks: sysctl.yml
+  become: true
   when: os_fix_sysctl | bool
 
 - import_tasks: pam.yml
@@ -38,8 +50,10 @@
 
 - name: Hidepid
   import_tasks: hidepid.yml
+  when: os_fix_hidepid
 
 - import_tasks: core_dumps.yml
+  become: true
   when: os_fix_core_dumps | bool
 
 - import_tasks: login_defs.yml

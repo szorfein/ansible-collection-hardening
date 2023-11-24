@@ -19,26 +19,35 @@ Role Variables
 --------------
 
 - `os_fix_core_dumps`
-  - Default: `true`
+  - Default: `false`
   - Description: Core dumps contain the recorded memory of a program, we stop it.
-- `os_fix_cpu`
-  - Default: `true`
+- `os_fix_cpu_microcode
+  - Default: `false`
+  - Description: Install the last microcode (amd or intel).
+- `os_fix_cmdline_grub`
+  - Default: `false`
+  - Description: Configure cmdline with GRUB (cat /proc/cmdline) to limit vulnerability (CPU, system, ...).
 - `os_fix_login_defs`
-  - Default: `true`
+  - Default: `false`
   - Description: Configure /etc/login.defs, password AGE, ENCRYPT_METHOD, SHA_CRYPT_ROUNDS, UMASK...
 - `os_fix_modprobe`
-  - Default: `true`
+  - Default: `false`
+  - Description: Block a lot of unused/old mods for Linux (see them with
+    the command lsmod).
 - `os_fix_ntp`
-  - Default: `true`
+  - Default: `false`
 - `os_fix_pam`
-  - Default: `true`
+  - Default: `false`
   - Description: Install pam-libpwquality and configure it.
 - `os_fix_permissions`
-  - Default: `true`
+  - Default: `false`
   - Description: Use a lot of 0600 and 0700 on sensitive files.
 - `os_fix_sysctl`
-  - Default: `true`
+  - Default: `false`
   - Description: Apply hardened rules with sysctl.
+- `os_fix_hidepid`
+  - Default: `false`
+  - Description: Hide pid run as root for normal user.
 - `os_auth_crypt_rounds`
   - Default: `20000`
   - Description: Use something between 1000-999999999, your default system should use something like 5000.
