@@ -23,6 +23,7 @@
 
 - name: update-grub
   ansible.builtin.shell: grub-mkconfig -o /boot/grub/grub.cfg
+  when: has_grub is succeeded
 
 - name: Start Tor
   ansible.builtin.service:
