@@ -1,9 +1,0 @@
----
-- ansible.builtin.shell: hash grub-install
-  register: grub_install
-  ignore_errors: true
-
-- name: importing Grub tasks
-  ansible.builtin.import_tasks: grub.yml
-  when: grub_install is succeeded
-  # when: grub_install is failed

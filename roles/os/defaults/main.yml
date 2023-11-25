@@ -9,7 +9,8 @@ os_fix_permissions: false
 os_fix_sysctl: false
 os_fix_cpu_microcode: false
 os_fix_hidepid: false
-os_fix_cmdline_grub: false
+os_fix_cmdline: false
+os_fix_umask: true
 
 os_umask: '027'
 
