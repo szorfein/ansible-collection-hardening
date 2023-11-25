@@ -6,8 +6,6 @@
     line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX slab_nomerge"'
     state: present
     create: true
-  notify:
-    - update-grub
   when: ansible_cmdline.slab_nomerge is not defined or
         ansible_cmdline.slab_nomerge != true
 
@@ -17,8 +15,6 @@
     regexp: '^GRUB_CMDLINE*init_on_free"$'
     line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX init_on_alloc=1 init_on_free=1"'
     state: present
-  notify:
-    - update-grub
   when: ansible_cmdline.init_on_free is not defined or
         ansible_cmdline.init_on_free != '1'
 
@@ -28,8 +24,6 @@
     regexp: '^GRUB_CMDLINE*page_alloc.shuffle=1"$'
     line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX page_alloc.shuffle=1"'
     state: present
-  notify:
-    - update-grub
   when: ansible_cmdline.page_alloc.shuffle is not defined or
         ansible_cmdline.page_alloc.shuffle != '1'
 
@@ -39,8 +33,6 @@
     regexp: '^GRUB_CMDLINE*pti=on"$'
     line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX pti=on"'
     state: present
-  notify:
-    - update-grub
   when: ansible_cmdline.pti is not defined or
         ansible_cmdline.pti != 'on'
 
@@ -50,8 +42,6 @@
     regexp: '^GRUB_CMDLINE*randomize_kstack_offset=on"$'
     line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX randomize_kstack_offset=on"'
     state: present
-  notify:
-    - update-grub
   when: ansible_cmdline.randomize_kstack_offset is not defined or
         ansible_cmdline.randomize_kstack_offset != 'on'
 
@@ -61,8 +51,6 @@
     regexp: '^GRUB_CMDLINE*vsyscall=none"$'
     line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX vsyscall=none"'
     state: present
-  notify:
-    - update-grub
   when: (ansible_cmdline.vsyscall is not defined or
         ansible_cmdline.vsyscall != 'none') and
         ansible_userspace_architecture == 'x86_64'
@@ -73,21 +61,14 @@
     regexp: '^GRUB_CMDLINE*debugfs=off"$'
     line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX debugfs=off"'
     state: present
-  notify:
-    - update-grub
   when: ansible_cmdline.debugfs is not defined or
         ansible_cmdline.debugfs != 'off'
 
 - name: oops=panic
   ansible.builtin.lineinfile:
     path: '{{ os_cpu_kernel_hardening_path }}'
-    regexp: '^GRUB_CMDLINE*oops=panic"$'
     line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX oops=panic"'
-    state: present
-  notify:
-    - update-grub
-  when: ansible_cmdline.oops is not defined or
-        ansible_cmdline.oops != 'panic'
+    state: absent
 
 # LogLevel 0
 - name: loglevel=0 quiet
@@ -97,8 +78,6 @@
     line: 'GRUB_CMDLINE_LINUX_DEFAULT="loglevel=0 quiet"'
     state: present
     create: true
-  notify:
-    - update-grub
   when: ansible_cmdline.loglevel is not defined or
         ansible_cmdline.loglevel != '0' or
         ansible_cmdline.quiet is not defined or
