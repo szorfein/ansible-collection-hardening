@@ -1,10 +1,4 @@
 ---
-- name: login_defs > umask {{ os_umask }}
-  ansible.builtin.lineinfile:
-    path: /etc/login.defs
-    regexp: '^UMASK'
-    line: "UMASK {{ os_umask }}"
-
 - name: login_defs > setting PASS_{MIN/MAX}_DAYS
   ansible.builtin.lineinfile:
     path: /etc/login.defs

@@ -23,13 +23,20 @@
     - update-grub
   when: os_fix_cpu_microcode | bool
 
-- import_tasks: cmdline_grub.yml
-  when: os_fix_cmdline_grub | bool
+- import_tasks: cmdline.yml
+  become: true
+  notify:
+    - update-grub
+  when: os_fix_cmdline | bool
 
 - import_tasks: modprobe.yml
+  become: true
+  notify:
+    - update-initrd
   when: os_fix_modprobe | bool
 
 - import_tasks: permissions.yml
+  become: true
   when: os_fix_permissions | bool
 
 - import_tasks: sysctl.yml
@@ -59,8 +66,7 @@
 - import_tasks: login_defs.yml
   when: os_fix_login_defs | bool
 
-- name: umask to {{ os_umask }}
-  ansible.builtin.lineinfile:
-    path: /etc/profile
-    regexp: '^umask'
-    line: "umask {{ os_umask }}"
+- name: setting umask to {{ os_umask }}
+  become: true
+  import_tasks: umask.yml
+  when: os_fix_umask | bool

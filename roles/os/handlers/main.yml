@@ -18,10 +18,12 @@
   when: entropy_module is defined
 
 - name: update-initrd
+  become: true
   ansible.builtin.shell: '{{ cmd_recompile_initrd }}'
   when: cmd_recompile_initrd is defined
 
 - name: update-grub
+  become: true
   ansible.builtin.shell: grub-mkconfig -o /boot/grub/grub.cfg
   when: has_grub is succeeded
 

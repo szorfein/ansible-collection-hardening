@@ -1,0 +1,18 @@
+---
+- name: applying umask to /etc/login.defs
+  ansible.builtin.lineinfile:
+    path: /etc/login.defs
+    regexp: '^UMASK'
+    line: "UMASK {{ os_umask }}"
+
+- name: applying umask to /etc/profile
+  ansible.builtin.lineinfile:
+    path: /etc/profile
+    regexp: '^umask'
+    line: "umask {{ os_umask }}"
+
+- name: applying umask to /etc/bash.bashrc
+  ansible.builtin.lineinfile:
+    path: /etc/bash.bashrc
+    regexp: '^umask'
+    line: "umask {{ os_umask }}"

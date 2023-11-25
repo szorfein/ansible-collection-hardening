@@ -1,0 +1,4 @@
+---
+- name: importing Grub tasks
+  ansible.builtin.import_tasks: grub.yml
+  when: has_grub is succeeded
