@@ -44,9 +44,11 @@
   when: os_fix_sysctl | bool
 
 - import_tasks: pam.yml
+  become: true
   when: os_fix_pam | bool
 
 - name: Entropy {{ entropy_pkgname }}
+  become: true
   package:
     name: '{{ entropy_pkgname }}'
     state: present
@@ -56,14 +58,16 @@
     - update-initrd
 
 - name: Hidepid
+  become: true
   import_tasks: hidepid.yml
-  when: os_fix_hidepid
+  when: os_fix_hidepid | bool
 
 - import_tasks: core_dumps.yml
   become: true
   when: os_fix_core_dumps | bool
 
 - import_tasks: login_defs.yml
+  become: true
   when: os_fix_login_defs | bool
 
 - name: setting umask to {{ os_umask }}
