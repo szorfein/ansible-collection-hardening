@@ -1,5 +1,17 @@
 # Ansible Collection - szorfein.hardening
 
+Last lynis test:
+
+``` txt
+Lynis security scan details:
+
+Hardening index : 80
+Test Performed: 233
+
+Scan mode:
+Normal [V]
+```
+
 Collection tested on:
 + Debian 11
 + Archlinux
