@@ -7,8 +7,12 @@ szorfein.hardening.os
 - Disable core dumps.
 - Corrects permission on sensitive files and directory.
 - Configures kernel parameters via sysctl.
-- Mitigate CPU vulnerabilities by install microcode and configure kernel cmdline.
+- Mitigate CPU vulnerabilities by installing last microcode and configure kernel cmdline.
 - Replace [NTP](https://blog.hboeck.de/archives/863-Dont-update-NTP-stop-using-it.html) by [secure-time-sync](https://github.com/szorfein/secure-time-sync).
+- Update kernel to [linux-hardened](https://github.com/anthraxx/linux-hardened) when available on your distro.
+- `/etc/securetty` is kept empty unless configured.
+- Force shell/profile/login.def to use default umask `027` on the system.
+- More entropy with haveged or [jittentropy-rngd](https://github.com/smuellerDD/jitterentropy-rngd).
 
 Requirements
 ------------
@@ -18,15 +22,21 @@ None.
 Role Variables
 --------------
 
+- `os_fix_cmdline`
+  - Default: `false`
+  - Description: Configure cmdline with GRUB (cat /proc/cmdline) to limit vulnerability (CPU, system, ...).
 - `os_fix_core_dumps`
   - Default: `false`
   - Description: Core dumps contain the recorded memory of a program, we stop it.
 - `os_fix_cpu_microcode`
   - Default: `false`
   - Description: Install the last microcode (amd or intel).
-- `os_fix_cmdline`
+- `os_fix_hidepid`
   - Default: `false`
-  - Description: Configure cmdline with GRUB (cat /proc/cmdline) to limit vulnerability (CPU, system, ...).
+  - Description: Hide pid run as root for normal user.
+- `os_fix_kernel`
+  - Default: `false`
+  - Description: Use linux hardened.
 - `os_fix_login_defs`
   - Default: `false`
   - Description: Configure /etc/login.defs, password AGE, ENCRYPT_METHOD, SHA_CRYPT_ROUNDS, UMASK...
@@ -42,12 +52,12 @@ Role Variables
 - `os_fix_permissions`
   - Default: `false`
   - Description: Use a lot of 0600 and 0700 on sensitive files.
+- `os_fix_securetty`
+  - Default: `false`
+  - Description: Limit terminals allowed for root. configure sudo or doas before applying this.
 - `os_fix_sysctl`
   - Default: `false`
   - Description: Apply hardened rules with sysctl.
-- `os_fix_hidepid`
-  - Default: `false`
-  - Description: Hide pid run as root for normal user.
 - `os_fix_umask`
   - Default: `true`
   - Description: Fix the value of umask on /etc/profile, /etc/login.defs, etc...
@@ -64,6 +74,9 @@ Role Variables
 - `os_umask`
   - Default: `'027'`
   - Description: Default value to apply to umask, the default on all Linux is 022.
+- `os_auth_ttys_list`
+  - Default: `'[]'`
+  - Description: Value to apply to securetty, the default disable all terminals. See your current file `cat /etc/securretty`.
 
 Dependencies
 ------------

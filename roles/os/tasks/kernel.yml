@@ -1,0 +1,16 @@
+---
+# Linux hardened is only available on x86_64 and arm64
+- name: kernel > installing {{ os_linux_hardened_pkg }}
+  ansible.builtin.package:
+    name: "{{ os_linux_hardened_pkg }}"
+    state: present
+  when: os_linux_hardened_pkg is defined and
+        ansible_userspace_architecture == 'x86_64'
+
+- name: kernel > removing older kernel packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ os_linux_pkgs_list }}"
+  when: os_linux_pkgs_list is defined and
+        ansible_userspace_architecture == 'x86_64'

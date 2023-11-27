@@ -1,15 +1,16 @@
 ---
 # defaults file for szorfein.hardening.os
+os_fix_cmdline: false
 os_fix_core_dumps: false
+os_fix_cpu_microcode: false
+os_fix_hidepid: false
 os_fix_login_defs: false
 os_fix_modprobe: false
 os_fix_ntp: false
 os_fix_pam: false
 os_fix_permissions: false
+os_fix_securetty: false
 os_fix_sysctl: false
-os_fix_cpu_microcode: false
-os_fix_hidepid: false
-os_fix_cmdline: false
 os_fix_umask: true
 
 os_umask: '027'
@@ -29,3 +30,6 @@ os_modprobe_uninstall_path: /etc/modprobe.d/31_uninstall.conf
 os_modprobe_blacklist_path: /etc/modprobe.d/32_blacklist.conf
 os_modprobe_remove_bluetooth: false
 os_modprobe_blacklist_cdrom: false
+
+# List of terminals allowed for root
+os_auth_ttys_list: []

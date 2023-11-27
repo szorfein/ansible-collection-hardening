@@ -20,7 +20,13 @@
 - name: update-initrd
   become: true
   ansible.builtin.shell: '{{ cmd_recompile_initrd }}'
-  when: cmd_recompile_initrd is defined
+  when: cmd_recompile_initrd is defined and
+        (not os_fix_kernel and os_linux_hardened_cmd_initrd is undefined)
+
+- name: update-hardened-initrd
+  become: true
+  ansible.builtin.shell: '{{ os_linux_hardened_cmd_initrd }}'
+  when: os_linux_hardened_cmd_initrd is defined
 
 - name: update-grub
   become: true
