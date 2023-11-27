@@ -7,10 +7,12 @@ szorfein.hardening.os
 - Disable core dumps.
 - Corrects permission on sensitive files and directory.
 - Configures kernel parameters via sysctl.
-- Mitigate CPU vulnerabilities by install microcode and configure kernel cmdline.
+- Mitigate CPU vulnerabilities by installing last microcode and configure kernel cmdline.
 - Replace [NTP](https://blog.hboeck.de/archives/863-Dont-update-NTP-stop-using-it.html) by [secure-time-sync](https://github.com/szorfein/secure-time-sync).
 - Update kernel to [linux-hardened](https://github.com/anthraxx/linux-hardened) when available on your distro.
 - `/etc/securetty` is kept empty unless configured.
+- Force shell/profile/login.def to use default umask `027` on the system.
+- More entropy with haveged or [jittentropy-rngd](https://github.com/smuellerDD/jitterentropy-rngd).
 
 Requirements
 ------------
