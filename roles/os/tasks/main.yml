@@ -9,25 +9,46 @@
       paths:
         - 'vars'
 
+- name: search for Grub
+  ansible.builtin.shell: hash grub-mkconfig 2>/dev/null
+  register: has_grub
+  ignore_errors: true
+
 - import_tasks: secure-time-sync.yml
   when: os_fix_ntp | bool
 
 - import_tasks: cpu.yml
-  when: os_fix_cpu | bool
+  become: true
+  notify:
+    - update-grub
+  when: os_fix_cpu_microcode | bool
+
+- import_tasks: cmdline.yml
+  become: true
+  notify:
+    - update-grub
+  when: os_fix_cmdline | bool
 
 - import_tasks: modprobe.yml
+  become: true
+  notify:
+    - update-initrd
   when: os_fix_modprobe | bool
 
 - import_tasks: permissions.yml
+  become: true
   when: os_fix_permissions | bool
 
 - import_tasks: sysctl.yml
+  become: true
   when: os_fix_sysctl | bool
 
 - import_tasks: pam.yml
+  become: true
   when: os_fix_pam | bool
 
 - name: Entropy {{ entropy_pkgname }}
+  become: true
   package:
     name: '{{ entropy_pkgname }}'
     state: present
@@ -37,16 +58,19 @@
     - update-initrd
 
 - name: Hidepid
+  become: true
   import_tasks: hidepid.yml
+  when: os_fix_hidepid | bool
 
 - import_tasks: core_dumps.yml
+  become: true
   when: os_fix_core_dumps | bool
 
 - import_tasks: login_defs.yml
+  become: true
   when: os_fix_login_defs | bool
 
-- name: umask to {{ os_umask }}
-  ansible.builtin.lineinfile:
-    path: /etc/profile
-    regexp: '^umask'
-    line: "umask {{ os_umask }}"
+- name: setting umask to {{ os_umask }}
+  become: true
+  import_tasks: umask.yml
+  when: os_fix_umask | bool

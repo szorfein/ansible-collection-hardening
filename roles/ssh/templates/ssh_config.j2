@@ -10,6 +10,7 @@ Host github.com
   MACs hmac-sha2-256,hmac-sha2-512,hmac-sha1
 
 Host *
+  KexAlgorithms {{ kex_algorithms }}
   HostKeyAlgorithms {{ host_key_algorithms }}
   Ciphers {{ ciphers }}
   MACs {{ macs }}
