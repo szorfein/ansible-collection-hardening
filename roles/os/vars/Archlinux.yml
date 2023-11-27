@@ -9,3 +9,8 @@ os_cpu_kernel_hardening_path: /etc/default/grub
 os_cpu_grub_quiet_path: /etc/default/grub
 os_cpu_intel_microcode_pkgname: intel-ucode
 os_cpu_amd_microcode_pkgname: amd-ucode
+
+os_linux_hardened_pkg: linux-hardened
+os_linux_pkgs_list:
+  - linux
+os_linux_hardened_cmd_initrd: mkinitcpio -p linux-hardened
