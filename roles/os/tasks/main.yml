@@ -74,3 +74,13 @@
   become: true
   import_tasks: umask.yml
   when: os_fix_umask | bool
+
+- name: securetty
+  become: true
+  ansible.builtin.template:
+    src: securetty.j2
+    dest: /etc/securetty
+    owner: root
+    group: root
+    mode: "0400"
+  when: os_fix_securetty | bool
