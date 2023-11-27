@@ -28,6 +28,7 @@
     enabled: yes
 
 - name: Update SSHD config > {{ sshd_config_file }}
+  become: true
   ansible.builtin.lineinfile:
     path: "{{ sshd_config_file }}"
     regexp: "{{ item.regexp }}"
@@ -70,6 +71,7 @@
   notify: restart ssh
 
 - name: Global sshd
+  become: true
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: "^X11Forwarding"
@@ -80,6 +82,7 @@
   notify: restart ssh
 
 - name: Configuring SSH > {{ ssh_config_file }}
+  become: true
   template:
     src: ssh_config.j2
     dest: "{{ ssh_config_file }}"

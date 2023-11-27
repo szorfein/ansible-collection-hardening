@@ -9,3 +9,18 @@
     path: /etc/fstab
     regexp: '^proc'
     line: "proc /proc proc nosuid,nodev,noexec,hidepid=2,gid=proc 0 0\n"
+
+- name: Add systemd/logind.conf.d
+  ansible.builtin.file:
+    path: /etc/systemd/system/systemd-logind.service.d
+    state: directory
+    mode: 0755
+  when: ansible_service_mgr == 'systemd'
+
+- name: supplementary group
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/system/systemd-logind.service.d/hidepid.conf
+    line: "[Service]\nSupplementaryGroups=proc"
+    state: present
+    create: true
+  when: ansible_service_mgr == 'systemd'

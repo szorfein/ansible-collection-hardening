@@ -24,7 +24,6 @@
     - { name: 'kernel.sysrq', value: '0' }
     #- { name: 'kernel.modules_disabled', value: '0' } # Should be 1
   ignore_errors: true
-  when: os_sysctl_kernel_rules | bool
 
 - name: Enforcing network rules > {{ os_sysctl_network_conf }}
   ansible.posix.sysctl:
@@ -59,7 +58,7 @@
     - { name: 'net.ipv4.conf.all.log_martians', value: '1' }
     - { name: 'net.ipv4.conf.default.log_martians', value: '1' }
     - { name: 'net.ipv4.tcp_timestamps', value: '0' }
-  when: os_sysctl_network_rules | bool
+  ignore_errors: true
 
 - name: Enforcing userspace rules > {{ os_sysctl_userspace_conf }}
   ansible.posix.sysctl:
@@ -76,4 +75,4 @@
     - { name: 'fs.protected_fifos', value: '2' }
     - { name: 'fs.protected_regular', value: '2' }
     - { name: 'fs.suid_dumpable', value: '0' }
-  when: os_sysctl_userspace_rules | bool
+  ignore_errors: true
