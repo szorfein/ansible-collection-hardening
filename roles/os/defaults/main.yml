@@ -3,6 +3,7 @@
 os_fix_cmdline: false
 os_fix_core_dumps: false
 os_fix_cpu_microcode: false
+os_fix_kernel: false
 os_fix_hidepid: false
 os_fix_login_defs: false
 os_fix_modprobe: false
