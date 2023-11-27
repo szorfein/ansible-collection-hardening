@@ -9,6 +9,7 @@ szorfein.hardening.os
 - Configures kernel parameters via sysctl.
 - Mitigate CPU vulnerabilities by install microcode and configure kernel cmdline.
 - Replace [NTP](https://blog.hboeck.de/archives/863-Dont-update-NTP-stop-using-it.html) by [secure-time-sync](https://github.com/szorfein/secure-time-sync).
+- Update kernel to [linux-hardened](https://github.com/anthraxx/linux-hardened) when available on your distro.
 
 Requirements
 ------------
@@ -18,6 +19,9 @@ None.
 Role Variables
 --------------
 
+- `os_fix_kernel`
+  - Default: `false`
+  - Description: Use linux hardened.
 - `os_fix_core_dumps`
   - Default: `false`
   - Description: Core dumps contain the recorded memory of a program, we stop it.
