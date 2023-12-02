@@ -11,8 +11,14 @@
     regexp: '^umask'
     line: "umask {{ os_umask }}"
 
+- name: search for /etc/bash.bashrc
+  ansible.builtin.stat:
+    path: /etc/bash.bashrc
+  register: p
+
 - name: applying umask to /etc/bash.bashrc
   ansible.builtin.lineinfile:
     path: /etc/bash.bashrc
     regexp: '^umask'
     line: "umask {{ os_umask }}"
+  when: p.stat.exists

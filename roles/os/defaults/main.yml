@@ -26,9 +26,6 @@ os_sysctl_kernel_conf: '/etc/sysctl.d/kernel.conf'
 os_sysctl_network_conf: '/etc/sysctl.d/network.conf'
 os_sysctl_userspace_conf: '/etc/sysctl.d/userspace.conf'
 
-os_modprobe_config_path: /etc/modprobe.d/30_config.conf
-os_modprobe_uninstall_path: /etc/modprobe.d/31_uninstall.conf
-os_modprobe_blacklist_path: /etc/modprobe.d/32_blacklist.conf
 os_modprobe_remove_bluetooth: false
 os_modprobe_blacklist_cdrom: false
 
