@@ -31,30 +31,39 @@
     - bluetooth
   when: os_modprobe_remove_bluetooth | bool
 
-- name: configure > {{ os_modprobe_config_path }}
+- name: modprobe > remove previous files
+  ansible.builtin.file:
+    path: '{{ item }}'
+    state: absent
+  loop:
+    - '{{ os_modprobe_dir }}/30_config.conf'
+    - '{{ os_modprobe_dir }}/31_uninstall.conf'
+    - '{{ os_modprobe_dir }}/32_blacklist.conf'
+
+- name: modprobe > {{ os_modprobe_dir }}/mods-config.conf
   ansible.builtin.template:
     src: modprobe-config.j2
-    dest: '{{ os_modprobe_config_path }}'
+    dest: '{{ os_modprobe_dir }}/mods-config.conf'
     owner: root
     group: root
     mode: 0644
   notify:
     - update-initrd
 
-- name: uninstall > {{ os_modprobe_uninstall_path }}
+- name: modprobe > {{ os_modprobe_dir }}/mods-uninstall.conf
   ansible.builtin.template:
     src: modprobe-uninstall.j2
-    dest: '{{ os_modprobe_uninstall_path }}'
+    dest: '{{ os_modprobe_dir }}/mods-uninstall.conf'
     owner: root
     group: root
     mode: 0644
   notify:
     - update-initrd
 
-- name: blacklist > {{ os_modprobe_blacklist_path }}
+- name: modprobe > {{ os_modprobe_dir }}/mods-blacklist.conf
   ansible.builtin.template:
     src: modprobe-blacklist.j2
-    dest: '{{ os_modprobe_blacklist_path }}'
+    dest: '{{ os_modprobe_dir }}/mods-blacklist.conf'
     owner: root
     group: root
     mode: 0644

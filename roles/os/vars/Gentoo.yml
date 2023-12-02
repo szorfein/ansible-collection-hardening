@@ -1,3 +1,14 @@
 ---
 entropy_pkgname: app-crypt/jitterentropy-rngd
 entropy_module: jitterentropy_rng
+
+# hard to say on gentoo
+cmd_recompile_initrd: emerge --config sys-kernel/gentoo-kernel-bin
+
+pwquality_pkgname: dev-libs/libpwquality
+pwquality_dest: /etc/pam.d/passwd
+
+os_cpu_intel_microcode_pkgname: intel-microcode
+os_cpu_amd_microcode_pkgname: linux-firmware
+
+os_modprobe_dir: /lib/modprobe.d/
