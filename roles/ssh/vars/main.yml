@@ -3,3 +3,5 @@
 service_name: sshd
 sshd_config_file: /etc/ssh/sshd_config
 ssh_config_file: /etc/ssh/ssh_config
+
+sshd_ed25519_path: /etc/ssh/ssh_host_ed25519_key

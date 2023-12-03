@@ -16,6 +16,10 @@ None.
 Role Variables
 --------------
 
+- `sshd_host_ed25519_key`
+  - Default: true
+  - Description: Allow and check presence of `ssh_host_ed25519_key` server side.
+  - Type: bool
 - `sshd_allow_group`
   - Default: `ssh-user`
 - `sshd_allow_agent_forwarding`
@@ -36,6 +40,8 @@ Role Variables
   - Default: `'no'`
 - `sshd_permit_root_login`
   - Default: `'no'`
+- `sshd_print_last_log`
+  - Default: `'yes'`
 - `sshd_tcp_keep_alive`
   - Default: `'no'`
 - `sshd_x11_forwarding`
