@@ -14,3 +14,7 @@ os_linux_hardened_pkg: linux-hardened
 os_linux_pkgs_list:
   - linux
 os_linux_hardened_cmd_initrd: mkinitcpio -p linux-hardened
+
+os_audit_pkgs:
+  - audit
+os_audit_service_name: auditd
