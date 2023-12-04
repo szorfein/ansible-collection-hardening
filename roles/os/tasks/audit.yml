@@ -33,6 +33,16 @@
     - regexp: '^disk_error_action ='
       line: 'disk_error_action = SUSPEND'
 
+- name: audit > writing rules {{ os_audit_rules_path }}
+  ansible.builtin.template:
+    src: auditd-rules.j2
+    dest: '{{ os_audit_rules_path }}'
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - auditd reload rules
+
 - name: audit > enabling service
   ansible.builtin.service:
     name: '{{ os_audit_service_name }}'

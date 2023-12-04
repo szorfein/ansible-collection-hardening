@@ -61,3 +61,7 @@
   ansible.builtin.service:
     name: tor
     state: restarted
+
+- name: auditd reload rules
+  become: true
+  ansible.builtin.command: augenrules --load

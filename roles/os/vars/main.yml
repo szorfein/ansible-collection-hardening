@@ -8,3 +8,5 @@ os_cpu_intel_microcode_pkgname: intel-ucode
 os_cpu_amd_microcode_pkgname: amd-ucode
 
 os_modprobe_dir: /etc/modprobe.d/
+
+os_audit_rules_path: /etc/audit/rules.d/audit.rules
