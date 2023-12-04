@@ -1,6 +1,6 @@
 ---
 entropy_pkgname: jitterentropy-rngd
-service_name: jitterentropy
+os_entropy_service_name: jitterentropy
 entropy_module: jitterentropy_rng
 pwquality_pkgname: libpam-pwquality
 pwquality_dest: /etc/security/pwquality.conf

@@ -6,10 +6,10 @@
 
 - name: Start Entropy Service
   ansible.builtin.service:
-    name: '{{ service_name }}'
+    name: '{{ os_entropy_service_name }}'
     state: started
     enabled: true
-  when: service_name is defined
+  when: os_entropy_service_name is defined
 
 - name: Load module jitterentropy
   ansible.builtin.template:

@@ -75,11 +75,122 @@
 -w /etc/sysctl.conf -p wa -k sysctl
 -w /etc/sysctl.d -p wa -k sysctl
 
+## Modprobe configuration
+-w /etc/modprobe.conf -p wa -k modprobe
+-w /etc/modprobe.d -p wa -k modprobe
+
+## KExec usage (all actions)
+-a always,exit -F arch=b64 -S kexec_load -k KEXEC
+
+## Special files
+-a always,exit -F arch=b64 -S mknod -S mknodat -k specialfiles
+
+## Mount operations (only attributable)
+-a always,exit -F arch=b64 -S mount -S umount2 -F auid!=-1 -k mount
+
+## Change swap (only attributable)
+-a always,exit -F arch=b64 -S swapon -S swapoff -F auid!=-1 -k swap
+
+## Time
+### Local time zone
+-w /etc/localtime -p wa -k localtime
+
+## User, group, password databases
+-w /etc/group -p wa -k etcgroup
+-w /etc/passwd -p wa -k etcpasswd
+-w /etc/gshadow -k etcgroup
+-w /etc/shadow -k etcpasswd
+-w /etc/security/opasswd -k opasswd
+
+## Passwd
+-w /usr/bin/passwd -p x -k passwd_modification
+
+## Tools to change group identifiers
+-w /usr/sbin/groupadd -p x -k group_modification
+-w /usr/sbin/groupmod -p x -k group_modification
+-w /usr/sbin/addgroup -p x -k group_modification
+-w /usr/sbin/useradd -p x -k user_modification
+-w /usr/sbin/userdel -p x -k user_modification
+-w /usr/sbin/usermod -p x -k user_modification
+-w /usr/sbin/adduser -p x -k user_modification
+
+## Login configuration and information
+-w /etc/login.defs -p wa -k login
+-w /etc/securetty -p wa -k login
+-w /var/log/faillog -p wa -k login
+-w /var/log/lastlog -p wa -k login
+-w /var/log/tallylog -p wa -k login
+
+## Network Environment
+### Changes to hostname
+-a always,exit -F arch=b64 -S sethostname -S setdomainname -k network_modifications
+
+### Successful IPv4 Connections
+-a always,exit -F arch=b64 -S connect -F a2=16 -F success=1 -F key=network_connect_4
+
+### S#uccessful IPv6 Connections
+-a always,exit -F arch=b64 -S connect -F a2=28 -F success=1 -F key=network_connect_6
+
+### Changes to other files
+-w /etc/hosts -p wa -k network_modifications
+
+### Changes to issue
+-w /etc/issue -p wa -k etcissue
+
+## Library search paths
+-w /etc/ld.so.conf -p wa -k libpath
+-w /etc/ld.so.conf.d -p wa -k libpath
+
 ## SSH configuration
 -w /etc/ssh/sshd_config -k sshd
 -w /etc/ssh/sshd_config.d -k sshd
 
+## root ssh key tampering
+-w /root/.ssh -p wa -k rootkey
+
+## Critical elements access failures
+-a always,exit -F arch=b64 -S open -F dir=/etc -F success=0 -k unauthedfileaccess
+-a always,exit -F arch=b64 -S open -F dir=/bin -F success=0 -k unauthedfileaccess
+-a always,exit -F arch=b64 -S open -F dir=/sbin -F success=0 -k unauthedfileaccess
+-a always,exit -F arch=b64 -S open -F dir=/usr/bin -F success=0 -k unauthedfileaccess
+-a always,exit -F arch=b64 -S open -F dir=/usr/sbin -F success=0 -k unauthedfileaccess
+-a always,exit -F arch=b64 -S open -F dir=/var -F success=0 -k unauthedfileaccess
+-a always,exit -F arch=b64 -S open -F dir=/home -F success=0 -k unauthedfileaccess
+-a always,exit -F arch=b64 -S open -F dir=/srv -F success=0 -k unauthedfileaccess
+
+## Process ID change (switching accounts) applications
+-w /bin/su -p x -k priv_esc
+
+## Power state
+-w /sbin/shutdown -p x -k power
+-w /sbin/poweroff -p x -k power
+-w /sbin/reboot -p x -k power
+-w /sbin/halt -p x -k power
+
+## Discretionary Access Control (DAC) modifications
+-a always,exit -F arch=b64 -S chmod  -F auid>=1000 -F auid!=-1 -k perm_mod
+-a always,exit -F arch=b64 -S chown -F auid>=1000 -F auid!=-1 -k perm_mod
+-a always,exit -F arch=b64 -S fchmod -F auid>=1000 -F auid!=-1 -k perm_mod
+-a always,exit -F arch=b64 -S fchmodat -F auid>=1000 -F auid!=-1 -k perm_mod
+-a always,exit -F arch=b64 -S fchown -F auid>=1000 -F auid!=-1 -k perm_mod
+-a always,exit -F arch=b64 -S fchownat -F auid>=1000 -F auid!=-1 -k perm_mod
+-a always,exit -F arch=b64 -S fremovexattr -F auid>=1000 -F auid!=-1 -k perm_mod
+-a always,exit -F arch=b64 -S fsetxattr -F auid>=1000 -F auid!=-1 -k perm_mod
+-a always,exit -F arch=b64 -S lchown -F auid>=1000 -F auid!=-1 -k perm_mod
+-a always,exit -F arch=b64 -S lremovexattr -F auid>=1000 -F auid!=-1 -k perm_mod
+-a always,exit -F arch=b64 -S lsetxattr -F auid>=1000 -F auid!=-1 -k perm_mod
+-a always,exit -F arch=b64 -S removexattr -F auid>=1000 -F auid!=-1 -k perm_mod
+-a always,exit -F arch=b64 -S setxattr -F auid>=1000 -F auid!=-1 -k perm_mod
+
 # Special Rules ---------------------------------------------------------------
+
+## Reconnaissance
+-w /usr/bin/whoami -p x -k recon
+-w /usr/bin/id -p x -k recon
+-w /bin/hostname -p x -k recon
+-w /bin/uname -p x -k recon
+-w /etc/issue -p r -k recon
+-w /etc/hostname -p r -k recon
 
 ## Injection
 ### These rules watch for code injection by the ptrace facility.
