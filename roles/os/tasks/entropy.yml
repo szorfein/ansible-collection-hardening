@@ -1,0 +1,24 @@
+---
+- name: entropy > installing packages
+  ansible.builtin.package:
+    name: '{{ item }}'
+    state: present
+  loop: "{{ os_entropy_pkgs }}"
+  when: os_entropy_pkgs is defined
+
+- name: entropy > enabling services
+  ansible.builtin.service:
+    name: '{{ item }}'
+    state: started
+    enabled: true
+  loop: "{{ os_entropy_services }}"
+  when: os_entropy_services is defined
+
+- name: entropy > enabling modules
+  ansible.builtin.template:
+    src: entropy_mod.j2
+    dest: /usr/lib/modules-load.d/jitterentropy.conf
+  notify:
+    - update-initrd
+    - update-hardened-initrd
+  when: os_entropy_modules is defined

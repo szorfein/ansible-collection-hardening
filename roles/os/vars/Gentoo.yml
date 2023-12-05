@@ -1,6 +1,8 @@
 ---
-entropy_pkgname: app-crypt/jitterentropy-rngd
-entropy_module: jitterentropy_rng
+os_entropy_pkgs:
+  - app-crypt/jitterentropy-rngd
+
+os_entropy_modules: jitterentropy_rng
 
 # hard to say on gentoo
 cmd_recompile_initrd: emerge --config sys-kernel/gentoo-kernel-bin

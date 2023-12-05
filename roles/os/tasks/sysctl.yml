@@ -18,10 +18,10 @@
     - { name: 'kernel.kexec_load_disabled', value: '1' }
     - { name: 'kernel.unprivileged_userns_clone', value: '0' }
     - { name: 'kernel.perf_event_paranoid', value: '3' }
-    - { name: 'kernel.kexec_load_disabled', value: '1' }
     - { name: 'dev.tty.ldisc_autoload', value: '0' }
     - { name: 'kernel.core_uses_pid', value: '1' }
     - { name: 'kernel.sysrq', value: '0' }
+    - { name: 'kernel.dmesg_restrict', value: '1' }
     #- { name: 'kernel.modules_disabled', value: '0' } # Should be 1
   ignore_errors: true
 
@@ -75,4 +75,5 @@
     - { name: 'fs.protected_fifos', value: '2' }
     - { name: 'fs.protected_regular', value: '2' }
     - { name: 'fs.suid_dumpable', value: '0' }
+    - { name: 'vm.swappiness', value: '1' } # avoid to copie memory in swap
   ignore_errors: true

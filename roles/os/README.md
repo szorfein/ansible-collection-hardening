@@ -22,6 +22,10 @@ None.
 Role Variables
 --------------
 
+- `os_fix_audit`
+  - Default: `false`
+  - Description: Install and configure auditd.
+  - Type: bool
 - `os_fix_cmdline`
   - Default: `false`
   - Description: Configure cmdline with GRUB (cat /proc/cmdline) to limit vulnerability (CPU, system, ...).
@@ -31,6 +35,10 @@ Role Variables
 - `os_fix_cpu_microcode`
   - Default: `false`
   - Description: Install the last microcode (amd or intel).
+- `os_fix_entropy`
+  - Default: `false`
+  - Description: Generate more entropy.
+  - Type: bool
 - `os_fix_hidepid`
   - Default: `false`
   - Description: Hide pid run as root for normal user.

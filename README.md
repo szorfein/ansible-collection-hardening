@@ -5,8 +5,8 @@ Last lynis test:
 ``` txt
 Lynis security scan details:
 
-Hardening index : 80
-Test Performed: 233
+Hardening index : 82
+Test Performed: 236
 
 Scan mode:
 Normal [V]
