@@ -2,6 +2,7 @@
 # defaults file for secure_shell
 allowed_users: []
 
+sshd_host_ed25519_key: true
 sshd_allow_group: ssh-user
 sshd_allow_agent_forwarding: 'no'
 sshd_allow_tcp_forwarding: 'no'
@@ -14,6 +15,7 @@ sshd_password_authentication: 'no'
 sshd_permit_root_login: 'no'
 sshd_tcp_keep_alive: 'no'
 sshd_x11_forwarding: 'no'
+sshd_print_last_log: 'yes'
 
 kex_algorithms: curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
 # see ssh -Q cipher

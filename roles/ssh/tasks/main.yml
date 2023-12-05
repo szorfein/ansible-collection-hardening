@@ -71,18 +71,34 @@
       line: "HostKeyAlgorithms {{ host_key_algorithms }}"
     - regexp: "^LogLevel"
       line: "LogLevel {{ sshd_log_level }}"
+    - regexp: "^PrintLastLog"
+      line: "PrintLastLog {{ sshd_print_last_log }}"
+    - regexp: "^X11Forwarding"
+      line: "X11Forwarding {{ sshd_x11_forwarding }}"
   notify: restart ssh
 
-- name: Global sshd
+- name: sshd > allow sshd_host_ed25519_key
   become: true
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
-    regexp: "^X11Forwarding"
-    line: "X11Forwarding {{ sshd_x11_forwarding }}"
+    regexp: '^HostKey {{ sshd_ed25519_path }}$'
+    line: 'HostKey {{ sshd_ed25519_path }}'
     state: present
     validate: 'sshd -t -f %s'
     mode: '0600'
   notify: restart ssh
+  when: sshd_host_ed25519_key | bool
+
+- name: sshd > search key {{ sshd_ed25519_path }}
+  ansible.builtin.stat:
+    path: '{{ sshd_ed25519_path }}'
+  register: p
+
+- name: sshd > generate key {{ sshd_ed25519_path }}
+  ansible.builtin.shell: ssh-keygen -t ed25519 -f {{ sshd_ed25519_path }} -N "" < /dev/null
+  when:
+    - sshd_host_ed25519_key | bool
+    - not p.stat.exists
 
 - name: Configuring SSH > {{ ssh_config_file }}
   become: true
