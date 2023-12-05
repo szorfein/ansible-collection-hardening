@@ -5,6 +5,7 @@
   when: ansible_service_mgr == 'systemd'
 
 - name: Start Entropy Service
+  become: true
   ansible.builtin.service:
     name: '{{ os_entropy_service_name }}'
     state: started
