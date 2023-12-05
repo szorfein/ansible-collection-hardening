@@ -1,7 +1,12 @@
 ---
-entropy_pkgname: jitterentropy-rngd
-os_entropy_service_name: jitterentropy
-entropy_module: jitterentropy_rng
+os_entropy_pkgs:
+  - jitterentropy-rngd
+
+os_entropy_services:
+  - jitterentropy
+
+os_entropy_modules: jitterentropy_rng
+
 pwquality_pkgname: libpam-pwquality
 pwquality_dest: /etc/security/pwquality.conf
 cmd_recompile_initrd: depmod -ae && update-initramfs -u

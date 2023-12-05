@@ -1,6 +1,12 @@
 ---
-entropy_pkgname: haveged
-os_entropy_service_name: haveged
+os_entropy_pkgs:
+  - haveged
+  - rng-tools
+
+os_entropy_services:
+  - haveged
+  - rngd
+
 pwquality_pkgname: libpwquality
 pwquality_dest: /etc/pam.d/passwd
 cmd_recompile_initrd: mkinitcpio -p linux

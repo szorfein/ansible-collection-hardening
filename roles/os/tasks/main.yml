@@ -59,16 +59,9 @@
   become: true
   when: os_fix_pam | bool
 
-- name: Entropy {{ entropy_pkgname }}
+- import_tasks: entropy.yml
   become: true
-  package:
-    name: '{{ entropy_pkgname }}'
-    state: present
-  notify:
-    - Start Entropy Service
-    - Load module jitterentropy
-    - update-initrd
-    - update-hardened-initrd
+  when: os_fix_entropy | bool
 
 - name: Hidepid
   become: true
