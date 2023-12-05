@@ -1,6 +1,10 @@
 ---
-entropy_pkgname: haveged
-service_name: haveged
+os_entropy_pkgs:
+  - haveged
+
+os_entropy_services:
+  - haveged
+
 pwquality_pkgname: libpwquality
 pwquality_dest: /etc/pam.d/passwd
 cmd_recompile_initrd: xbps-reconfigure -f $(xbps-query -l | grep {{ ansible_kernel }} | awk '{print $2}' | head -n1)

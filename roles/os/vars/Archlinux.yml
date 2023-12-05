@@ -1,6 +1,12 @@
 ---
-entropy_pkgname: haveged
-service_name: haveged
+os_entropy_pkgs:
+  - haveged
+  - rng-tools
+
+os_entropy_services:
+  - haveged
+  - rngd
+
 pwquality_pkgname: libpwquality
 pwquality_dest: /etc/pam.d/passwd
 cmd_recompile_initrd: mkinitcpio -p linux
@@ -14,3 +20,27 @@ os_linux_hardened_pkg: linux-hardened
 os_linux_pkgs_list:
   - linux
 os_linux_hardened_cmd_initrd: mkinitcpio -p linux-hardened
+
+os_audit_pkgs:
+  - audit
+os_audit_service_name: auditd
+# where auditd save/record logs
+os_audit_records:
+  - /var/log/audit
+
+# where auditd configs
+os_audit_configs:
+  - /etc/audit/
+  - /etc/libaudit.conf
+
+os_audit_bins:
+  - /usr/bin/auditctl
+  - /usr/bin/auditd
+  - /usr/bin/augenrules
+
+os_audit_tools:
+  - /usr/bin/ausearch
+  - /usr/bin/aureport
+  - /usr/bin/aulast
+  - /usr/bin/aulastlog
+  - /usr/bin/auvirt
