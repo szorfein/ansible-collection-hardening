@@ -16,5 +16,13 @@
   with_items:
     - { regexp: '^SHA_CRYPT_MIN_ROUNDS', line: 'SHA_CRYPT_MIN_ROUNDS {{ os_auth_crypt_rounds }}' }
     - { regexp: '^SHA_CRYPT_MAX_ROUNDS', line: 'SHA_CRYPT_MAX_ROUNDS {{ os_auth_crypt_rounds }}' }
+
+- name: login_defs > setting other options
+  ansible.builtin.lineinfile:
+    path: /etc/login.defs
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+  with_items:
     - { regexp: '^MD5_CRYPT_ENAB', line: 'MD5_CRYPT_ENAB no' }
     - { regexp: '^ENCRYPT_METHOD', line: 'ENCRYPT_METHOD SHA512' }
+    - { regexp: '^FAILLOG_ENAB', line: 'FAILLOG_ENAB yes' }
