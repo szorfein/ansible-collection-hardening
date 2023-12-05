@@ -14,6 +14,10 @@
   register: has_grub
   ignore_errors: true
 
+- import_tasks: audit.yml
+  become: true
+  when: os_fix_audit | bool
+
 - import_tasks: kernel.yml
   become: true
   notify:
