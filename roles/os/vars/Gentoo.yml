@@ -14,3 +14,27 @@ os_cpu_intel_microcode_pkgname: intel-microcode
 os_cpu_amd_microcode_pkgname: linux-firmware
 
 os_modprobe_dir: /lib/modprobe.d/
+
+os_audit_pkgs:
+  - sys-process/audit
+
+os_audit_service_name: auditd
+os_audit_records:
+  - /var/log/audit
+
+os_audit_configs:
+  - /etc/audit/
+  - /etc/libaudit.conf
+
+os_audit_tools:
+  - /sbin/ausearch
+  - /sbin/aureport
+  - /usr/bin/aulast
+  - /usr/bin/aulastlog
+  - /usr/bin/auvirt
+
+os_audit_bins:
+  - /sbin/auditctl
+  - /sbin/auditd
+  - /sbin/augenrules
+
