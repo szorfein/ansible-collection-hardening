@@ -1,28 +1,28 @@
 ---
-- name: login_defs > setting PASS_{MIN/MAX}_DAYS
+- name: Login_defs > setting PASS_{MIN/MAX}_DAYS
   ansible.builtin.lineinfile:
     path: /etc/login.defs
-    regexp: '{{ item.regexp }}'
-    line: '{{ item.line }}'
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
   with_items:
-    - { regexp: '^PASS_MIN_DAYS', line: 'PASS_MIN_DAYS {{ os_auth_pass_min_days }}' }
-    - { regexp: '^PASS_MAX_DAYS', line: 'PASS_MAX_DAYS {{ os_auth_pass_max_days }}' }
+    - { regexp: "^PASS_MIN_DAYS", line: "PASS_MIN_DAYS {{ os_auth_pass_min_days }}" }
+    - { regexp: "^PASS_MAX_DAYS", line: "PASS_MAX_DAYS {{ os_auth_pass_max_days }}" }
 
-- name: login_defs > setting SHA_CRYPT_{MIN/MAX}_ROUND
+- name: Login_defs > setting SHA_CRYPT_{MIN/MAX}_ROUND
   ansible.builtin.lineinfile:
     path: /etc/login.defs
-    regexp: '{{ item.regexp }}'
-    line: '{{ item.line }}'
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
   with_items:
-    - { regexp: '^SHA_CRYPT_MIN_ROUNDS', line: 'SHA_CRYPT_MIN_ROUNDS {{ os_auth_crypt_rounds }}' }
-    - { regexp: '^SHA_CRYPT_MAX_ROUNDS', line: 'SHA_CRYPT_MAX_ROUNDS {{ os_auth_crypt_rounds }}' }
+    - { regexp: "^SHA_CRYPT_MIN_ROUNDS", line: "SHA_CRYPT_MIN_ROUNDS {{ os_auth_crypt_rounds }}" }
+    - { regexp: "^SHA_CRYPT_MAX_ROUNDS", line: "SHA_CRYPT_MAX_ROUNDS {{ os_auth_crypt_rounds }}" }
 
-- name: login_defs > setting other options
+- name: Login_defs > setting other options
   ansible.builtin.lineinfile:
     path: /etc/login.defs
-    regexp: '{{ item.regexp }}'
-    line: '{{ item.line }}'
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
   with_items:
-    - { regexp: '^MD5_CRYPT_ENAB', line: 'MD5_CRYPT_ENAB no' }
-    - { regexp: '^ENCRYPT_METHOD', line: 'ENCRYPT_METHOD SHA512' }
-    - { regexp: '^FAILLOG_ENAB', line: 'FAILLOG_ENAB yes' }
+    - { regexp: "^MD5_CRYPT_ENAB", line: "MD5_CRYPT_ENAB no" }
+    - { regexp: "^ENCRYPT_METHOD", line: "ENCRYPT_METHOD SHA512" }
+    - { regexp: "^FAILLOG_ENAB", line: "FAILLOG_ENAB yes" }
