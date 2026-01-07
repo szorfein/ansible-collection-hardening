@@ -6,7 +6,23 @@
 ## Disable bluetooth to reduce attack surface due to extended history of security vulnerabilities
 ## https://en.wikipedia.org/wiki/Bluetooth#History_of_security_concerns
 install bluetooth /bin/false >&2
+install thbluetooth_6lowpan /bin/false >&2
+install bt3c_cs /bin/false >&2
+install btbcm /bin/false >&2
+install btintel /bin/false >&2
+install btmrvl /bin/false >&2
+install btmrvl_sdio /bin/false >&2
+install btmtk /bin/false >&2
+install btmtksdio /bin/false >&2
+install btmtkuart /bin/false >&2
+install btnxpuart /bin/false >&2
+install btrsi /bin/false >&2
+install btrtl /bin/false >&2
+install btsdio /bin/false >&2
+install btqca /bin/false >&2
 install btusb /bin/false >&2
+install btbcm /bin/false >&2
+install virtio_bt /bin/false >&2
 {% endif %}
 
 ## Disable thunderbolt and firewire modules to prevent some DMA attacks
@@ -46,6 +62,7 @@ install af_802154 /bin/false >&2
 install ipx /bin/false >&2
 install appletalk /bin/false >&2
 install psnap /bin/false >&2
+install llc /bin/false >&2
 install p8023 /bin/false >&2
 install p8022 /bin/false >&2
 install can /bin/false >&2
@@ -57,6 +74,7 @@ install freevxfs /bin/false >&2
 install jffs2 /bin/false >&2
 install hfs /bin/false >&2
 install hfsplus /bin/false >&2
+install squashfs /bin/true
 install udf /bin/false >&2
 
 ## Disable uncommon network file systems to reduce attack surface
@@ -76,4 +94,25 @@ install vivid /bin/false >&2
 ## Disable Intel Management Engine (ME) interface with the OS
 ## https://www.kernel.org/doc/html/latest/driver-api/mei/mei.html
 install mei /bin/false >&2
+install mei_gsc_proxy /bin/false >&2
+install mei_hdcp /bin/false >&2
 install mei-me /bin/false >&2
+install mei_phy /bin/false >&2
+install mei_pxp /bin/false >&2
+install mei-txe /bin/false >&2
+install mei-vsc /bin/false >&2
+install mei-vsc-hw /bin/false >&2
+install mei_wdt /bin/false >&2
+install microread_mei /bin/false >&2
+
+## Intel Platform Monitoring Technology (PMT) Telemetry
+install pmt_class /bin/false >&2
+install pmt_crashlog /bin/false >&2
+install pmt_telemetry /bin/false >&2
+
+## Joysticks
+install joydev /bin/false >&2
+
+# Microphone and webcam
+install uvcvideo /bin/true
+# install snd_hda_intel /bin/true

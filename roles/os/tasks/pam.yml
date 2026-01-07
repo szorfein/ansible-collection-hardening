@@ -1,10 +1,10 @@
 ---
-- name: installing pwquality
+- name: Installing pwquality
   ansible.builtin.package:
-    name: '{{ pwquality_pkgname }}'
+    name: "{{ pwquality_pkgname }}"
     state: present
 
-- name: configure pwquality
+- name: Configure pwquality
   ansible.builtin.template:
     src: pwquality.j2
-    dest: '{{ pwquality_dest }}'
+    dest: "{{ pwquality_dest }}"

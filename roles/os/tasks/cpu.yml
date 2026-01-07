@@ -1,7 +1,7 @@
 ---
 # tasks file for cmdline
-- name: mount /boot
-  ansible.builtin.shell: '{{ os_mount_boot_cmd }}'
+- name: Mount /boot
+  ansible.builtin.command: "{{ os_mount_boot_cmd }}"
   when: os_mount_boot_cmd is defined
 
 # https://wiki.debian.org/Microcode
@@ -21,14 +21,14 @@
     update_cache: true
   when: ansible_os_family == 'Archlinux'
 
-- name: install Intel microcode
+- name: Install Intel microcode
   ansible.builtin.package:
-    name: '{{ os_cpu_intel_microcode_pkgname }}'
+    name: "{{ os_cpu_intel_microcode_pkgname }}"
     state: latest
   when: ansible_processor[1] == 'GenuineIntel'
 
-- name: install Amd microcode
+- name: Install Amd microcode
   ansible.builtin.package:
-    name: '{{ os_cpu_amd_microcode_pkgname }}'
+    name: "{{ os_cpu_amd_microcode_pkgname }}"
     state: latest
   when: ansible_processor[1] == 'AuthenticAMD'

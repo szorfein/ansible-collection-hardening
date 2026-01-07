@@ -1,0 +1,68 @@
+{% if os_use_apparmor %}
+# Apparmor
+#GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX apparmor=1 security=apparmor"
+{% endif %}
+
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX slab_nomerge"
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX page_alloc.shuffle=1"
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX pti=on"
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX randomize_kstack_offset=on"
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX vsyscall=none"
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX debugfs=off"
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX oops=panic"
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX mce=0"
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX quiet loglevel=0"
+
+# slub_debug was abandonned, use init_on_free instead.
+# https://github.com/torvalds/linux/commit/792702911f581f7793962fbeb99d5c3a1b28f4c3
+# slub_debug=FZ
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX init_on_alloc=1 init_on_free=1"
+
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX mds=full,nosmt"
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX lockdown=confidentiality"
+
+# Signed module - Not enabled by default yet due to several issues.
+# module.sig_enforce=1
+
+{% if os_disable_ipv6 %}
+# Disable ipv6
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX ipv6.disable=1"
+{% endif %}
+
+# Cpu mitigation
+# Spectre v1, v2 enable on Arch linux-hardened
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX spectre_v2=on spec_store_bypass_disable=on tsx=off tsx_async_abort=full,nosmt mds=full,nosmt l1tf=full,force nosmt=force kvm.nx_huge_pages=force"
+
+# Alrealy enable on Arch linux-hardened
+# https://www.kernel.org/doc/html/latest/dev-tools/kfence.html
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX kfence.sample_interval=100"
+
+# ## Disable 32-bit Virtual Dynamic Shared Object (vDSO) mappings.
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX vdso32=0"
+
+# ## Switch (back) to using kCFI as the default Control Flow Integrity (CFI) implementation.
+# https://forums.whonix.org/t/kernel-hardening-security-misc/7296/561
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX cfi=kcfi"
+
+# ## Disable support for all 32-bit x86 processes and syscalls.
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX ia32_emulation=0"
+
+# ## 2. Direct Memory Access:
+# ## https://madaidans-insecurities.github.io/guides/linux-hardening.html#dma-attacks
+#GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX amd_iommu=force_isolation"
+#GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX intel_iommu=on"
+#GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX iommu=force"
+#GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX iommu.passthrough=0"
+#GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX iommu.strict=1"
+#GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX efi=disable_early_pci_dma"
+
+# Entropy
+# ## Do not credit the CPU seeds as an entropy sources at boot.
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX random.trust_cpu=off"
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX random.trust_bootloader=off"
+
+# ## Entropy will be extracted from up to the first 4GB of RAM as another source.
+## Requires the linux-hardened kernel patch.
+{% if os_use_kernel_hardened and os_linux_hardened_pkgs is defined %}
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX extra_latent_entropy"
+{% endif %}
