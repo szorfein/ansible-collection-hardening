@@ -39,6 +39,7 @@
   when: os_fix_audit | bool
 
 - ansible.builtin.import_tasks: secure-time-sync.yml
+  become: true
   when: os_fix_ntp | bool
 
 - ansible.builtin.import_tasks: cpu.yml

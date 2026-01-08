@@ -4,6 +4,7 @@
 - Linux-hardened also install headers when available
 - Apply code linter
 - Block ICMP request
+- Secure-time-sync on a cron job all the 30 minutes
 
 ### Options name (new) change
 
