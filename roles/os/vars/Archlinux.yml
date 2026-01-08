@@ -8,7 +8,7 @@ os_entropy_services:
   - rngd
 
 pwquality_pkgname: libpwquality
-pwquality_dest: /etc/pam.d/passwd
+pwquality_dest: /etc/security/pwquality.conf
 cmd_recompile_initrd: mkinitcpio -p linux
 
 os_cpu_kernel_hardening_path: /etc/default/grub

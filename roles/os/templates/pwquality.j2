@@ -1,11 +1,39 @@
-{% if ansible_os_family == 'Debian' %}
-retry = 3
-minlen = 10
+{% if ansible_facts['os_family'] == 'Debian' or ansible_facts['os_family'] == 'Archlinux' %}
+# man pwquality_conf
+
+# Number of characters in the new password that must not be present in the
+# old password.
 difok = 6
+
+# Minimum acceptable size for the new password.
+minlen = 16
+
+# The maximum credit for having digits in the new password.
 dcredit = -1
+
+# The maximum credit for having uppercase characters in the new password.
 ucredit = -1
-ocredit = -1
+
+# The maximum credit for having lowercase characters in the new password.
 lcredit = -1
+
+# The maximum credit for having other characters in the new password.
+ocredit = -1
+
+# Whether to check for the words from the cracklib dictionary.
+dictcheck = 1
+
+# Length of substrings from the username to check for in the password.
+usersubstr = 5
+
+# Whether the check is enforced by the PAM module and possibly other
+# applications.
+enforcing = 0
+
+# Prompt user at most N times before returning with error. The default is 1.
+retry = 3
+
+# Enforces pwquality checks on the root user password.
 enforce_for_root
 {% else %}
 password required pam_pwquality.so retry=3 minlen=10 difok=6 dcredit=-1 ucredit=-1 ocredit=-1 lcredit=-1 [badwords=myservice mydomain] enforce_for_root

@@ -1,26 +1,31 @@
 ---
-# Only if your distribution have the package
+# defaults file for szorfein.hardening.os
+# all the variables used in playbooks
+
+# Prefer to use linux-hardened if your distribution have the package
 os_use_kernel_hardened: false
 
-# Enable if you use Grub
+# Fix cmdline by using grub, enable if you use Grub
 os_fix_grub: false
 
 # Apparmor - (Not yet configured...)
 os_use_apparmor: false
 
-# Ipv6
+# Ipv6, set to true if you don't need ipv6
 os_disable_ipv6: false
 
-# defaults file for szorfein.hardening.os
+# Remove ntp and update time with HTTPS all the 30 minutes
+os_fix_ntp: false
+
+# Configure passwords with 15 characters minimum with libpwquality
+# Block account during 1 day after 10 login failed
+os_fix_pam: false
+
 os_fix_audit: false
 os_fix_core_dumps: false
 os_fix_cpu_microcode: false
 os_fix_entropy: false
 os_fix_hidepid: false
-os_fix_login_defs: false
-os_fix_modprobe: false
-os_fix_ntp: false
-os_fix_pam: false
 os_fix_permissions: false
 os_fix_securetty: false
 os_fix_sysctl: false
@@ -32,13 +37,15 @@ os_umask: "027"
 # pass aging controls
 os_auth_pass_min_days: 7
 os_auth_pass_max_days: 180
-
+os_auth_retries: 10
 os_auth_crypt_rounds: 20000
 
 os_sysctl_kernel_conf: "/etc/sysctl.d/kernel.conf"
 os_sysctl_network_conf: "/etc/sysctl.d/network.conf"
 os_sysctl_userspace_conf: "/etc/sysctl.d/userspace.conf"
 
+# Keep or disable modules
+os_fix_modprobe: false
 os_modprobe_remove_bluetooth: false
 os_modprobe_blacklist_cdrom: false
 

@@ -1,6 +1,8 @@
 # Ansible Collection - szorfein.hardening
 
-This collections match for Gnu/Linux and follow recommendations from:
+Enhance security of system based on GNU/Linux for a better default, i try to keep it the most minimal possible without settings a lot of variables or having to rewriting all the config files or writing custom scripts.
+
+This collections follow recommendations from:
 
 - https://theprivacyguide1.github.io/linux_hardening_guide.html
 - https://madaidans-insecurities.github.io/guides/linux-hardening.html
@@ -9,6 +11,7 @@ Get few settings from:
 
 - https://github.com/Kicksecure/security-misc
 - Secureblue: https://github.com/secureblue/secureblue/tree/live
+- https://github.com/dev-sec/ansible-collection-hardening
 
 Last lynis test:
 

@@ -26,3 +26,14 @@
     - { regexp: "^MD5_CRYPT_ENAB", line: "MD5_CRYPT_ENAB no" }
     - { regexp: "^ENCRYPT_METHOD", line: "ENCRYPT_METHOD SHA512" }
     - { regexp: "^FAILLOG_ENAB", line: "FAILLOG_ENAB yes" }
+    - { regexp: "^LOGIN_RETRIES", line: "LOGIN_RETRIES {{ os_auth_retries }}" }
+
+# Many options are alrealy configured in PAM
+- name: Login_defs > removing options
+  ansible.builtin.lineinfile:
+    path: /etc/login.defs
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^PASS_MIN_LEN", line: "#PASS_MIN_LEN" }
+    - { regexp: "^PASS_MAX_LEN", line: "#PASS_MAX_LEN" }

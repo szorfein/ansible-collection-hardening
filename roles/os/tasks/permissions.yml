@@ -8,15 +8,15 @@
     - /boot
     - /usr/src
     - /usr/lib/modules
-    - "{{ ansible_user_dir }}"
+    - "{{ ansible_facts['user_dir'] }}"
 
 - name: Find cron directories
   ansible.builtin.find:
     paths:
       - /etc
     patterns:
-      - cron.hourly
       - cron.daily
+      - cron.hourly
       - cron.weekly
       - cron.monthly
       - cron.d
