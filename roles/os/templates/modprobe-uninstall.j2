@@ -116,3 +116,9 @@ install joydev /bin/false >&2
 # Microphone and webcam
 install uvcvideo /bin/true
 # install snd_hda_intel /bin/true
+
+{% if os_modprobe_blacklist_cdrom %}
+# block loading cdrom
+install cdrom /bin/false
+install sr_mod /bin/false
+{% endif %}

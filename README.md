@@ -8,6 +8,7 @@ This collections match for Gnu/Linux and follow recommendations from:
 Get few settings from:
 
 - https://github.com/Kicksecure/security-misc
+- Secureblue: https://github.com/secureblue/secureblue/tree/live
 
 Last lynis test:
 

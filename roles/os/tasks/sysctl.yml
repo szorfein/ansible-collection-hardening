@@ -20,8 +20,13 @@
     - { name: "kernel.perf_event_paranoid", value: "3" }
     - { name: "dev.tty.ldisc_autoload", value: "0" }
     - { name: "kernel.core_uses_pid", value: "1" }
+    - { name: "kernel.core_pattern", value: "|/bin/false" }
     - { name: "kernel.sysrq", value: "0" }
     - { name: "kernel.dmesg_restrict", value: "1" }
+    - { name: "kernel.oops_limit", value: "100" }
+    - { name: "kernel.warn_limit", value: "100" }
+    - { name: "kernel.panic", value: "1" }
+    - { name: "kernel.io_uring_disabled", value: "2" }
     #- { name: 'kernel.modules_disabled', value: '0' } # Should be 1
   ignore_errors: true
 
@@ -36,19 +41,12 @@
     - { name: "net.ipv4.tcp_rfc1337", value: "1" }
     - { name: "net.ipv4.conf.all.rp_filter", value: "1" }
     - { name: "net.ipv4.conf.default.rp_filter", value: "1" }
-    - { name: "net.ipv4.conf.all.accept_redirects", value: "0" }
-    - { name: "net.ipv4.conf.default.accept_redirects", value: "0" }
     - { name: "net.ipv4.conf.all.secure_redirects", value: "0" }
     - { name: "net.ipv4.conf.default.secure_redirects", value: "0" }
-    - { name: "net.ipv6.conf.all.accept_redirects", value: "0" }
-    - { name: "net.ipv6.conf.default.accept_redirects", value: "0" }
-    - { name: "net.ipv4.conf.all.send_redirects", value: "0" }
-    - { name: "net.ipv4.conf.default.send_redirects", value: "0" }
+    - { name: "net.ipv4.icmp_echo_ignore_broadcasts", value: "1" }
+    - { name: "net.ipv4.icmp_ignore_bogus_error_responses", value: "1" }
     - { name: "net.ipv4.icmp_echo_ignore_all", value: "1" }
-    - { name: "net.ipv4.conf.all.accept_source_route", value: "0" }
-    - { name: "net.ipv4.conf.default.accept_source_route", value: "0" }
-    - { name: "net.ipv6.conf.all.accept_source_route", value: "0" }
-    - { name: "net.ipv6.conf.default.accept_source_route", value: "0" }
+    - { name: "net.ipv6.icmp_echo_ignore_all", value: "1" }
     - { name: "net.ipv6.conf.all.accept_ra", value: "0" }
     - { name: "net.ipv6.conf.default.accept_ra", value: "0" }
     - { name: "net.ipv4.tcp_sack", value: "0" }
@@ -58,6 +56,7 @@
     - { name: "net.ipv4.conf.all.log_martians", value: "1" }
     - { name: "net.ipv4.conf.default.log_martians", value: "1" }
     - { name: "net.ipv4.tcp_timestamps", value: "0" }
+    - { name: "net.ipv4.conf.all.drop_gratuitous_arp", value: "1" }
   ignore_errors: true
 
 - name: Enforcing userspace rules > {{ os_sysctl_userspace_conf }}
@@ -75,5 +74,18 @@
     - { name: "fs.protected_fifos", value: "2" }
     - { name: "fs.protected_regular", value: "2" }
     - { name: "fs.suid_dumpable", value: "0" }
+    - { name: "fs.binfmt_misc.status", value: "0" }
     - { name: "vm.swappiness", value: "1" } # avoid to copie memory in swap
+    - { name: "vm.unprivileged_userfaultfd", value: "0" }
+    - { name: "vm.mmap_min_addr", value: "65536" }
+    - { name: "vm.max_map_count", value: "1048576" }
   ignore_errors: true
+
+# when value can change depending of linux-hardened or not
+- name: Sysctl > Inject other rules via template
+  ansible.builtin.template:
+    src: sysctl-star-hardening.j2
+    dest: "/etc/sysctl.d/55-star-hardening.conf"
+    owner: root
+    group: root
+    mode: "0644"
