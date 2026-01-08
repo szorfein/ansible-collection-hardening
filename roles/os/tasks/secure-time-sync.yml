@@ -1,6 +1,6 @@
 ---
 # tasks file for secure_time_sync
-- name: Sts > get secure-time-sync
+- name: Sts > downloading secure-time-sync
   ansible.builtin.get_url:
     dest: /usr/local/bin/secure-time-sync
     url: https://raw.githubusercontent.com/szorfein/secure-time-sync/main/secure-time-sync.sh
@@ -12,42 +12,34 @@
     name: curl
     state: present
 
-- name: Sts > adding systemd service
-  ansible.builtin.template:
-    src: secure-time-sync-systemd.service.j2
-    dest: /usr/lib/systemd/system/secure-time-sync.service
-    owner: root
-    group: root
-    mode: "0644"
-  notify:
-    - Reload systemd
-    - Enable Sts
-  when: ansible_service_mgr == 'systemd'
-
-- name: Sts > adding runit service
-  ansible.builtin.copy:
-    src: etc/sv/secure-time-sync
-    dest: /etc/sv/
-    directory_mode: true
-    owner: root
-    group: root
-    mode: "0755"
-  notify:
-    - Enable Sts
-  when: ansible_service_mgr == 'runit'
-
-- ansible.builtin.include_tasks: secure-time-sync-tor.yml
-  when: use_tor is defined and use_tor | bool
-
 - ansible.builtin.include_tasks: secure-time-sync-apparmor.yml
-  when: ansible_apparmor.status == 'enabled'
+  when: ansible_facts['apparmor'].status == 'enabled'
 
-- name: Sts > disable systemd NTP protocol
+# TODO: remove secure-time-sync here on the next release
+- name: Sts > Disabling systemd NTP protocol services
   ansible.builtin.service:
     name: "{{ item }}"
     state: stopped
     enabled: false
   with_items:
     - systemd-timesyncd
+    - secure-time-sync
   ignore_errors: true
-  when: ansible_service_mgr == 'systemd'
+  #when: ansible_facts['service_mgr'] == 'systemd'
+
+- name: Sts > Disabling ntp using timedatectl
+  ansible.builtin.command: timedatectl set-ntp 0
+  when: ansible_facts['service_mgr'] == 'systemd'
+
+- name: Sts > Removing old cron job
+  ansible.builtin.cron:
+    name: "secure-time-sync for reboot"
+    state: absent
+
+- name: Sts > Adding a cron job all the 30 minutes
+  ansible.builtin.cron:
+    name: "Update time with https"
+    job: "/usr/local/bin/secure-time-sync"
+    minute: "*/30"
+    state: present
+    user: root
