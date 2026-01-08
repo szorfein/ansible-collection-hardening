@@ -76,10 +76,6 @@
   become: true
   when: os_fix_core_dumps | bool
 
-- ansible.builtin.import_tasks: login_defs.yml
-  become: true
-  when: os_fix_login_defs | bool
-
 - name: Setting umask to {{ os_umask }}
   become: true
   ansible.builtin.import_tasks: umask.yml

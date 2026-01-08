@@ -1,10 +1,34 @@
 ---
-- name: Installing pwquality
+- name: Pam > Installing pwquality
   ansible.builtin.package:
     name: "{{ pwquality_pkgname }}"
     state: present
 
-- name: Configure pwquality
+- name: Pam > Configuring libpwquality
   ansible.builtin.template:
     src: pwquality.j2
     dest: "{{ pwquality_dest }}"
+
+- name: Pam > Configuring pam to use lib_pwquality
+  ansible.builtin.template:
+    src: pam-pwquality.j2
+    dest: /etc/pam.d/passwd
+
+# User will be blocked after 10 deny, access will be re-enabled after 86400 secs (=1day)
+- name: Pam > Configuring faillock
+  ansible.builtin.lineinfile:
+    path: /etc/security/faillock.conf
+    regexp: "{{ item.regex }}"
+    line: "{{ item.line }}"
+  with_items:
+    - regex: "^audit"
+      line: "audit"
+    - regex: "^deny"
+      line: "deny = {{ os_auth_retries }}"
+    - regex: "^unlock_time"
+      line: "unlock_time = 86400"
+    - regex: "^even_deny_root"
+      line: "even_deny_root"
+
+- ansible.builtin.import_tasks: login_defs.yml
+  become: true

@@ -5,6 +5,7 @@
 - Apply code linter
 - Block ICMP request
 - Secure-time-sync on a cron job all the 30 minutes
+- Update Pam rules, add faillock, libpwquality password
 
 ### Options name (new) change
 
