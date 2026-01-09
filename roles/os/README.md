@@ -1,5 +1,4 @@
-szorfein.hardening.os
-=====================
+# szorfein.hardening.os
 
 - Block and blacklist ~50 modules with modprobe.
 - Hide processes currently running on the system for users.
@@ -14,13 +13,11 @@ szorfein.hardening.os
 - Force shell/profile/login.def to use default umask `027` on the system.
 - More entropy with haveged or [jittentropy-rngd](https://github.com/smuellerDD/jitterentropy-rngd).
 
-Requirements
-------------
+## Requirements
 
 None.
 
-Role Variables
---------------
+## Role Variables
 
 - `os_fix_audit`
   - Default: `false`
@@ -86,21 +83,63 @@ Role Variables
   - Default: `'[]'`
   - Description: Value to apply to securetty, the default disable all terminals. See your current file `cat /etc/securretty`.
 
-Dependencies
-------------
+## Dependencies
 
 A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
 
-Example Playbook
-----------------
+## Example Playbook
 
-    - hosts: servers
-      collections:
-        - szorfein.hardening
-      roles:
-         - { role: szorfein.hardening.os, os_auth_crypt_rounds: 65536 }
+Config in ansible/group_vars/hardened.yml
 
-License
--------
+```yml
+---
+#Install linux-hardened if your distro have the package
+os_use_kernel_hardened: true
+
+#Apply secure value on sysctl
+os_fix_sysctl: true
+
+#If you use Grub
+os_fix_grub: true
+
+#Disable a lot of useless modules
+os_fix_modprobe: true
+os_modprobe_remove_bluetooth: true
+os_modprobe_blacklist_cdrom: true
+
+#Remove ntp and update time with https every 30 minutes
+os_fix_ntp: true
+
+#Ensure microcode are installed
+#os_fix_cpu_microcode: true
+
+#os_fix_core_dumps: true
+#os_fix_hidepid: true
+#os_fix_kernel: true
+#os_fix_login_defs: true
+#os_fix_pam: true
+#os_fix_permissions: true
+#os_fix_securetty: true
+#os_fix_umask: true
+
+os_umask: "027"
+```
+
+In a ansible/os-hardened.yml
+
+```yml
+---
+- hosts: servers
+  collections:
+    - szorfein.hardening
+  roles:
+    - os
+```
+
+And just apply as usually
+
+    ansible-playbook -i hosts --ask-become os-hardened.yml
+
+## License
 
 MIT

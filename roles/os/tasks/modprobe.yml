@@ -1,12 +1,12 @@
 ---
-- name: debug
+- name: Debug
   ansible.builtin.debug:
     msg:
       - "cmd: '{{ cmd_recompile_initrd }}'"
 
-- name: unload
+- name: Unload
   community.general.modprobe:
-    name: '{{ item }}'
+    name: "{{ item }}"
     state: absent
   with_items:
     - dccp
@@ -19,53 +19,50 @@
     - mei_txe
     - mei-me
     - mei
+  ignore_errors: true
 
-- name: unload bluetooth
+- name: Unload bluetooth
   community.general.modprobe:
-    name: '{{ item }}'
+    name: "{{ item }}"
     state: absent
   with_items:
     - hci_vhci
     - hci_uart
     - btusb
+    - btbcm
+    - btqca
+    - btmtk
+    - btrtl
     - bluetooth
-  when: os_modprobe_remove_bluetooth | bool
+  when: os_modprobe_blacklist_bluetooth | bool
+  ignore_errors: true
 
-- name: modprobe > remove previous files
-  ansible.builtin.file:
-    path: '{{ item }}'
-    state: absent
-  loop:
-    - '{{ os_modprobe_dir }}/30_config.conf'
-    - '{{ os_modprobe_dir }}/31_uninstall.conf'
-    - '{{ os_modprobe_dir }}/32_blacklist.conf'
-
-- name: modprobe > {{ os_modprobe_dir }}/mods-config.conf
+- name: Modprobe > {{ os_modprobe_dir }}/mods-config.conf
   ansible.builtin.template:
     src: modprobe-config.j2
-    dest: '{{ os_modprobe_dir }}/mods-config.conf'
+    dest: "{{ os_modprobe_dir }}/mods-config.conf"
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   notify:
     - update-initrd
 
-- name: modprobe > {{ os_modprobe_dir }}/mods-uninstall.conf
+- name: Modprobe > {{ os_modprobe_dir }}/mods-uninstall.conf
   ansible.builtin.template:
     src: modprobe-uninstall.j2
-    dest: '{{ os_modprobe_dir }}/mods-uninstall.conf'
+    dest: "{{ os_modprobe_dir }}/mods-uninstall.conf"
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   notify:
     - update-initrd
 
-- name: modprobe > {{ os_modprobe_dir }}/mods-blacklist.conf
+- name: Modprobe > {{ os_modprobe_dir }}/mods-blacklist.conf
   ansible.builtin.template:
     src: modprobe-blacklist.j2
-    dest: '{{ os_modprobe_dir }}/mods-blacklist.conf'
+    dest: "{{ os_modprobe_dir }}/mods-blacklist.conf"
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   notify:
     - update-initrd

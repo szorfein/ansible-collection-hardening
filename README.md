@@ -1,8 +1,26 @@
 # Ansible Collection - szorfein.hardening
 
+Enhance security of system GNU/Linux with safe default, i try to keep this playbook the most minimal possible.
+
+- Prefer to change few lines in a config file instead of rewriting the whole content.
+- Also avoid to add/write custom scripts.
+- All actions/tasks are disable by default, you enable what your need/want.
+- A tiny list of variables can be changed for each roles, no need to edit more than 50 variables...
+
+This collections follow recommendations from:
+
+- https://theprivacyguide1.github.io/linux_hardening_guide.html
+- https://madaidans-insecurities.github.io/guides/linux-hardening.html
+
+Get few settings from:
+
+- https://github.com/Kicksecure/security-misc
+- Secureblue: https://github.com/secureblue/secureblue/tree/live
+- https://github.com/dev-sec/ansible-collection-hardening
+
 Last lynis test:
 
-``` txt
+```txt
 Lynis security scan details:
 
 Hardening index : 82
@@ -13,14 +31,15 @@ Normal [V]
 ```
 
 Collection tested on:
-+ Debian 11
-+ Archlinux
-+ Voidlinux
+
+- Debian 11
+- Archlinux
+- Voidlinux
 
 ## Include Roles
 
-+ [os](https://github.com/szorfein/ansible-collection-hardening/tree/main/roles/os)
-+ [ssh](https://github.com/szorfein/ansible-collection-hardening/tree/main/roles/ssh)
+- [os](https://github.com/szorfein/ansible-collection-hardening/tree/main/roles/os)
+- [ssh](https://github.com/szorfein/ansible-collection-hardening/tree/main/roles/ssh)
 
 ## Install
 
@@ -52,5 +71,5 @@ Or just with:
     - szorfein.hardening.ssh
   vars:
     os_fix_ntp: false
-    sshd_x11_forwarding: 'yes'
+    sshd_x11_forwarding: "yes"
 ```

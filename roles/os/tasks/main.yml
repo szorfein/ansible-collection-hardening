@@ -1,87 +1,87 @@
 ---
 - name: Load OS-specific vars.
-  include_vars: "{{ lookup('first_found', params) }}"
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
   vars:
     params:
       files:
-        - '{{ ansible_os_family }}.yml'
+        - "{{ ansible_facts['os_family'] }}.yml"
         - main.yml
       paths:
-        - 'vars'
+        - "vars"
 
-- name: search for Grub
+- name: Search for Grub
   ansible.builtin.shell: hash grub-mkconfig 2>/dev/null
   register: has_grub
   ignore_errors: true
 
-- import_tasks: audit.yml
-  become: true
-  when: os_fix_audit | bool
-
-- import_tasks: kernel.yml
+# Also install headers
+- ansible.builtin.import_tasks: kernel.yml
   become: true
   notify:
     - update-hardened-initrd
     - update-grub
-  when: os_fix_kernel | bool
+  when: os_use_kernel_hardened | bool
 
-- import_tasks: secure-time-sync.yml
+# change option name os_fix_grub instead of os_fix_cmdline
+- ansible.builtin.import_tasks: cmdline.yml
+  become: true
+  notify:
+    - update-grub
+  when: os_fix_grub | bool
+
+# Block ICMP request
+- ansible.builtin.import_tasks: sysctl.yml
+  become: true
+  when: os_fix_sysctl | bool
+
+- ansible.builtin.import_tasks: audit.yml
+  become: true
+  when: os_fix_audit | bool
+
+- ansible.builtin.import_tasks: secure-time-sync.yml
+  become: true
   when: os_fix_ntp | bool
 
-- import_tasks: cpu.yml
+- ansible.builtin.import_tasks: cpu.yml
   become: true
   notify:
     - update-grub
   when: os_fix_cpu_microcode | bool
 
-- import_tasks: cmdline.yml
-  become: true
-  notify:
-    - update-grub
-  when: os_fix_cmdline | bool
-
-- import_tasks: modprobe.yml
+- ansible.builtin.import_tasks: modprobe.yml
   become: true
   notify:
     - update-initrd
     - update-hardened-initrd
   when: os_fix_modprobe | bool
 
-- import_tasks: permissions.yml
+- ansible.builtin.import_tasks: permissions.yml
   become: true
   when: os_fix_permissions | bool
 
-- import_tasks: sysctl.yml
-  become: true
-  when: os_fix_sysctl | bool
-
-- import_tasks: pam.yml
+- ansible.builtin.import_tasks: pam.yml
   become: true
   when: os_fix_pam | bool
 
-- import_tasks: entropy.yml
+- ansible.builtin.import_tasks: entropy.yml
   become: true
   when: os_fix_entropy | bool
 
 - name: Hidepid
   become: true
-  import_tasks: hidepid.yml
+  ansible.builtin.import_tasks: hidepid.yml
   when: os_fix_hidepid | bool
 
-- import_tasks: core_dumps.yml
+- ansible.builtin.import_tasks: core_dumps.yml
   become: true
   when: os_fix_core_dumps | bool
 
-- import_tasks: login_defs.yml
+- name: Setting umask to {{ os_umask }}
   become: true
-  when: os_fix_login_defs | bool
-
-- name: setting umask to {{ os_umask }}
-  become: true
-  import_tasks: umask.yml
+  ansible.builtin.import_tasks: umask.yml
   when: os_fix_umask | bool
 
-- name: securetty
+- name: Securetty
   become: true
   ansible.builtin.template:
     src: securetty.j2

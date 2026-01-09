@@ -1,23 +1,23 @@
 ---
-- name: creating a proc group
+- name: Creating a proc group
   ansible.builtin.group:
-    name:  proc
+    name: proc
     state: present
 
-- name: editing /etc/fstab
+- name: Editing /etc/fstab
   ansible.builtin.lineinfile:
     path: /etc/fstab
-    regexp: '^proc'
+    regexp: "^proc"
     line: "proc /proc proc nosuid,nodev,noexec,hidepid=2,gid=proc 0 0\n"
 
 - name: Add systemd/logind.conf.d
   ansible.builtin.file:
     path: /etc/systemd/system/systemd-logind.service.d
     state: directory
-    mode: 0755
+    mode: "0755"
   when: ansible_service_mgr == 'systemd'
 
-- name: supplementary group
+- name: Supplementary group
   ansible.builtin.lineinfile:
     path: /etc/systemd/system/systemd-logind.service.d/hidepid.conf
     line: "[Service]\nSupplementaryGroups=proc"

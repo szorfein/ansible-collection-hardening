@@ -58,3 +58,8 @@ blacklist udlfb
 blacklist cdrom
 blacklist sr_mod
 {% endif %}
+
+{% if os_modprobe_blacklist_webcam %}
+# Blacklist Webcam
+blacklist uvcvideo
+{% endif %}

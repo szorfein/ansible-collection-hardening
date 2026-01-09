@@ -1,24 +1,24 @@
 ---
-- name: applying umask to /etc/login.defs
+- name: Applying umask to /etc/login.defs
   ansible.builtin.lineinfile:
     path: /etc/login.defs
-    regexp: '^UMASK'
+    regexp: "^UMASK"
     line: "UMASK {{ os_umask }}"
 
-- name: applying umask to /etc/profile
+- name: Applying umask to /etc/profile
   ansible.builtin.lineinfile:
     path: /etc/profile
-    regexp: '^umask'
+    regexp: "^umask"
     line: "umask {{ os_umask }}"
 
-- name: search for /etc/bash.bashrc
+- name: Search for /etc/bash.bashrc
   ansible.builtin.stat:
     path: /etc/bash.bashrc
   register: p
 
-- name: applying umask to /etc/bash.bashrc
+- name: Applying umask to /etc/bash.bashrc
   ansible.builtin.lineinfile:
     path: /etc/bash.bashrc
-    regexp: '^umask'
+    regexp: "^umask"
     line: "umask {{ os_umask }}"
   when: p.stat.exists

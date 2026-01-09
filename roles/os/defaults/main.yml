@@ -1,35 +1,61 @@
 ---
 # defaults file for szorfein.hardening.os
-os_fix_audit: false
-os_fix_cmdline: false
-os_fix_core_dumps: false
-os_fix_cpu_microcode: false
-os_fix_entropy: false
-os_fix_kernel: false
-os_fix_hidepid: false
-os_fix_login_defs: false
-os_fix_modprobe: false
+# all the variables used in playbooks
+
+# Prefer to use linux-hardened if your distribution have the package
+os_use_kernel_hardened: false
+
+# Fix cmdline by using grub, enable if you use Grub
+os_fix_grub: false
+# TODO: add a variable to reload grub, default is 'grub-mkconfig -o /boot/grub/grub.cfg'
+
+# Apparmor - (Not yet configured...)
+os_use_apparmor: false
+
+# Ipv6, set to true if you don't need ipv6
+os_disable_ipv6: false
+
+# Remove ntp and update time with HTTPS all the 30 minutes
 os_fix_ntp: false
+
+# Configure passwords with 15 characters minimum with libpwquality
+# Block account during 1 day after 10 login failed
+# TODO: add variables for minimum characters, day for blocked account
 os_fix_pam: false
-os_fix_permissions: false
-os_fix_securetty: false
-os_fix_sysctl: false
-os_fix_umask: true
-
-os_umask: '027'
-
-# pass aging controls
 os_auth_pass_min_days: 7
 os_auth_pass_max_days: 180
-
+os_auth_retries: 10
+# rounds, default used by linux is 5000
 os_auth_crypt_rounds: 20000
 
-os_sysctl_kernel_conf: '/etc/sysctl.d/kernel.conf'
-os_sysctl_network_conf: '/etc/sysctl.d/network.conf'
-os_sysctl_userspace_conf: '/etc/sysctl.d/userspace.conf'
+# Harden kernel parameter at runtime
+os_fix_sysctl: false
+os_sysctl_dirname: "/etc/sysctl.d"
 
-os_modprobe_remove_bluetooth: false
+# Try to generate more entropy by installing haveged and/or jitterentropy when available
+# Also disable proprietary implementation by intel or other
+os_fix_entropy: false
+
+os_fix_audit: false
+os_fix_core_dumps: false
+os_fix_cpu_microcode: false
+os_fix_hidepid: false
+os_fix_permissions: false
+os_fix_securetty: false
+os_fix_umask: true
+os_fix_kernel: true
+
+os_umask: "027"
+
+# Keep or just disable ~150 modules useless
+os_fix_modprobe: false
+# Removing modules bellow depend of your own usage
+os_modprobe_blacklist_bluetooth: false
 os_modprobe_blacklist_cdrom: false
+os_modprobe_blacklist_webcam: false
+# You can disable usb completly (or later TODO: enable os_usbguard: true)
+os_modprobe_blacklist_usb: false
+#os_modprobe_blacklist_microphone: false - not yet configured
 
 # List of terminals allowed for root
 os_auth_ttys_list: []
