@@ -34,7 +34,7 @@
     - btmtk
     - btrtl
     - bluetooth
-  when: os_modprobe_remove_bluetooth | bool
+  when: os_modprobe_blacklist_bluetooth | bool
   ignore_errors: true
 
 - name: Modprobe > {{ os_modprobe_dir }}/mods-config.conf

@@ -66,3 +66,8 @@ GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX random.trust_bootloader=off"
 {% if os_use_kernel_hardened and os_linux_hardened_pkgs is defined %}
 GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX extra_latent_entropy"
 {% endif %}
+
+{% if os_modprobe_blacklist_usb and not os_use_kernel_hardened %}
+# When no need usb
+GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX nousb"
+{% endif %}

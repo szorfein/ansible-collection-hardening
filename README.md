@@ -1,6 +1,11 @@
 # Ansible Collection - szorfein.hardening
 
-Enhance security of system based on GNU/Linux for a better default, i try to keep it the most minimal possible without settings a lot of variables or having to rewriting all the config files or writing custom scripts.
+Enhance security of system GNU/Linux with safe default, i try to keep this playbook the most minimal possible.
+
+- Prefer to change few lines in a config file instead of rewriting the whole content.
+- Also avoid to add/write custom scripts.
+- All actions/tasks are disable by default, you enable what your need/want.
+- A tiny list of variables can be changed for each roles, no need to edit more than 50 variables...
 
 This collections follow recommendations from:
 
