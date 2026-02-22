@@ -15,7 +15,7 @@
     path: /etc/systemd/system/systemd-logind.service.d
     state: directory
     mode: "0755"
-  when: ansible_service_mgr == 'systemd'
+  when: ansible_facts['service_mgr'] == 'systemd'
 
 - name: Supplementary group
   ansible.builtin.lineinfile:
@@ -23,4 +23,5 @@
     line: "[Service]\nSupplementaryGroups=proc"
     state: present
     create: true
-  when: ansible_service_mgr == 'systemd'
+    mode: '600'
+  when: ansible_facts['service_mgr'] == 'systemd'

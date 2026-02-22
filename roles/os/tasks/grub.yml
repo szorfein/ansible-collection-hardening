@@ -1,20 +1,4 @@
 ---
-- name: Grub > Removing older config if any
-  ansible.builtin.lineinfile:
-    path: "{{ os_cpu_kernel_hardening_path }}"
-    state: absent
-    regexp: "{{ item }}"
-  with_items:
-    - '^GRUB_CMDLINE_LINUX(.*)slab_nomerge"$'
-    - '^GRUB_CMDLINE_LINUX(.*)init_on_free=1"$'
-    - '^GRUB_CMDLINE_LINUX(.*)shuffle=1"$'
-    - '^GRUB_CMDLINE_LINUX(.*)pti=on"$'
-    - '^GRUB_CMDLINE_LINUX(.*)randomize_kstack_offset=on"$'
-    - '^GRUB_CMDLINE_LINUX(.*)vsyscall=none"$'
-    - '^GRUB_CMDLINE_LINUX(.*)debugfs=off"$'
-    - '^GRUB_CMDLINE_LINUX(.*)ipv6.disable=1"$'
-    - '^GRUB_CMDLINE_LINUX(.*)ahci.mobile_lpm_policy=1"$'
-
 - name: Grub > hardening cmdline by template
   ansible.builtin.blockinfile:
     block: "{{ lookup('ansible.builtin.template', 'grub-cmdline.j2') }}"
